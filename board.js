@@ -13,7 +13,12 @@ class Board{
   }
 
   animate(){
-    this.activePiece ? this.activePiece.animate() : null
+    this.activePiece.draw(this.color)
+    return window.setInterval(() => {
+      this.activePiece.clearRect()
+      this.activePiece.fallDown()
+      this.activePiece.draw()
+    }, 500)
   }
 
   createNullBoard(){

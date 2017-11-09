@@ -195,15 +195,6 @@ class Piece{
     return this.rotations[this.currentRotationIdx]
   }
 
-  animate(){
-    this.draw(this.color)
-    return window.setInterval(() => {
-      this.clearRect()
-      this.fallDown()
-      this.draw()
-    }, 500)
-  }
-
   draw(){
     this.each(__WEBPACK_IMPORTED_MODULE_0__squares_square_js__["a" /* default */].prototype.draw, [this.color])
   }
@@ -221,6 +212,7 @@ class Piece{
     }else{
       this.anchorSquare.position[1] -= 1
       this.board.activePiece = null
+      debugger;
       this.draw()
     }
   }
@@ -350,6 +342,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
   const game = new __WEBPACK_IMPORTED_MODULE_6__game_js__["a" /* default */]({ctx});
   game.setup()
+  game.play()
 })
 
 
@@ -435,7 +428,12 @@ class Board{
   }
 
   animate(){
-    this.activePiece ? this.activePiece.animate() : null
+    this.activePiece.draw(this.color)
+    return window.setInterval(() => {
+      this.activePiece.clearRect()
+      this.activePiece.fallDown()
+      this.activePiece.draw()
+    }, 500)
   }
 
   createNullBoard(){
@@ -906,6 +904,23 @@ class Game{
     this.availablePieces = []
   }
 
+  play(){
+    this.introducePiece();
+    this.board.animate()
+    // setTimeout(() => {
+    //   this.introducePiece();
+    // }, 500)
+  }
+
+  introducePiece(){
+    if(!this.board.activePiece){
+      this.availablePieces.length === 0
+        ? this.createPiece()
+        : null
+      this.board.introducePiece(this.randomPiece())
+    }
+  }
+
   setup(){
     this.createPieces()
     this.board.handleKeyClicks()
@@ -914,15 +929,19 @@ class Game{
 
   randomPiece(){
     const randomEl = this.availablePieces[0]
+    this.availablePieces.splice(0, 1)
+    return randomEl
   }
 
   createPieces(){
     for(let i = 0; i < 4; i++){
       __WEBPACK_IMPORTED_MODULE_1__pieces_create_pieces_js__["a" /* default */].forEach((pieceConstructor) => {
-        this.availablePieces.push(pieceConstructor(this.ctx))
+        const piece = pieceConstructor(this.ctx)
+        piece.board = this.board
+        this.availablePieces.push(piece)
       })
     }
-    this.availablPieces = __WEBPACK_IMPORTED_MODULE_2_lodash_shuffle___default()(this.availablePieces)
+    this.availablePieces = __WEBPACK_IMPORTED_MODULE_2_lodash_shuffle___default()(this.availablePieces)
   }
 }
 

@@ -13,15 +13,6 @@ class Piece{
     return this.rotations[this.currentRotationIdx]
   }
 
-  animate(){
-    this.draw(this.color)
-    return window.setInterval(() => {
-      this.clearRect()
-      this.fallDown()
-      this.draw()
-    }, 500)
-  }
-
   draw(){
     this.each(Square.prototype.draw, [this.color])
   }
@@ -39,6 +30,7 @@ class Piece{
     }else{
       this.anchorSquare.position[1] -= 1
       this.board.activePiece = null
+      debugger;
       this.draw()
     }
   }

@@ -13,4 +13,5 @@ window.addEventListener("DOMContentLoaded", () => {
 
   const game = new Game({ctx});
   game.setup()
+  game.play()
 })
