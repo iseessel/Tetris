@@ -1,0 +1,9 @@
+canvas{
+  border: 5px solid black;
+}
+
+.game{
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+}

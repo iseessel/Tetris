@@ -1,0 +1,2 @@
+Game Dimensions:
+10 x 20
