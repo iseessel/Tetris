@@ -14,15 +14,27 @@ class Board{
   }
 
   animate(){
-    this.activePiece.draw(this.color)
+    this.activePiece.draw()
     return window.setInterval(() => {
       this.activePiece.clearRect()
       this.activePiece.fallDown()
-      if(!this.activePieceInBounds()){
-        this.stopSquare()
+      if(this.squareMustStop()){
+        // So that when the piece hits the bottom
+        // it doesn't instantly become inactive.
+        setTimeout(() => {
+          if(this.squareMustStop()){
+            this.stopSquare()
+            this.activePiece.draw()
+          }
+        }, 300)
       }
       this.activePiece.draw()
     }, 500)
+  }
+
+  squareMustStop(){
+    return this.activePieceAtBottom() ||
+      this.activePieceCollide("down")
   }
 
   stopSquare(){
@@ -34,9 +46,27 @@ class Board{
   cementActivePieceOnGrid(){
     this.activePiece.currentRotation().forEach((square) => {
       const position = square.pos();
-      console.log(position);
-      this.grid[position[0]][position[1]] = square
+      this.grid[position[1]][position[0]] = square
     })
+  }
+
+  activePieceCollide(direction){
+    return this.activePiece.currentRotation().some((square) => {
+      const position = square.pos()
+      let posX = position[1]
+      let posY = position[0]
+      switch(direction){
+        case("down"):
+          posX += 1
+          break;
+      }
+      return !(this.grid[posX][posY] ==
+        nullSquareInstance)
+    })
+  }
+
+  activePieceAtBottom(){
+    return this.activePiece.atBottom()
   }
 
   activePieceInBounds(){
@@ -44,9 +74,9 @@ class Board{
   }
 
   createNullBoard(){
-    for(let i = 0; i < 40; i++){
+    for(let i = 0; i < 20; i++){
       const row = []
-      for(let j = 0; j < 20; j++){
+      for(let j = 0; j < 10; j++){
         row.push(nullSquareInstance)
       }
       this.grid.push(row)

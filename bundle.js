@@ -87,13 +87,13 @@ class Square{
   draw(color){
     const drawingCords = this.cordsToPos()
     this.ctx.fillStyle = color
-    this.ctx.fillRect(drawingCords[1], drawingCords[0],
+    this.ctx.fillRect(drawingCords[0], drawingCords[1],
       this.dimensions[0], this.dimensions[1]);
   }
 
   clearRect(){
     const drawingCords = this.cordsToPos()
-    this.ctx.clearRect(drawingCords[1], drawingCords[0],
+    this.ctx.clearRect(drawingCords[0], drawingCords[1],
       this.dimensions[0], this.dimensions[1])
   }
 
@@ -104,6 +104,10 @@ class Square{
 
   cordsToPos(){
     return [this.pos()[0] * 40, this.pos()[1] * 40]
+  }
+
+  atBottom(){
+    return this.pos()[1] === 19
   }
 
 }
@@ -142,22 +146,21 @@ class Piece{
 
   fallDown(){
     this.clearRect()
-    this.anchorSquare.fallDown()
-    if(this.inBounds()){
-      this.each(function(){
-        this.draw()})
-    }else{
-      this.anchorSquare.position[1] -= 1
+    if(!this.atBottom() && !this.board.activePieceCollide("down")){
+      this.anchorSquare.fallDown()
+      this.each(() => {
+        this.draw()
+      })
+      }else{
       this.draw()
-      this.board.stopSquare()
     }
   }
 
   handleLeftKeyPress(){
     this.clearRect()
     this.anchorSquare.moveLeft()
-    if(this.inBounds()){
-      this.each(function(){
+    if(this.inBounds() && !this.board.activePieceCollide()){
+      this.each(() => {
         this.draw()
       })
     }else{
@@ -169,8 +172,8 @@ class Piece{
   handleRightKeyPress(){
     this.clearRect()
     this.anchorSquare.moveRight()
-    if(this.inBounds()){
-      this.each(function(){
+    if(this.inBounds() && !this.board.activePieceCollide()){
+      this.each(() => {
         this.draw()
       })
     }else{
@@ -184,27 +187,68 @@ class Piece{
       this.rotations.length
   }
 
+  unRotate(){
+    this.currentRotationIdx = (this.currentRotationIdx
+      + this.rotations.length - 1) %
+      this.rotations.length
+  }
+
   handleUpKeyPress(){
     this.clearRect()
     this.rotate()
-    if(this.inBounds()){
-      this.each(function(){
+    if(this.inBounds() && !this.board.activePieceCollide()){
+      this.each(() => {
         this.draw()
       })
     }else{
-      while(!this.inBounds()){
-        this.anchorSquare.pos()[0] > 5 ? this.anchorSquare.moveLeft()
-          : this.anchorSquare.moveRight()
-      }
-      this.each(function(){
-        this.draw()
-      })
+      this.wallKick() ? null : this.unRotate()
     }
+    this.each(() => {
+      this.draw()
+    })
+  }
+
+  wallKick(){
+    //Naively search for a position to move to; if are available on one side,
+    //try the other side -- otherwise give up and return to original position.
+    //NB: This naive way results in fewer
+    // computations than checking which side a collision is on.
+    for(let i = 0; i < 2; i ++){
+      if (this.positionAvailable()){
+        this.anchorSquare.moveLeft()
+      }else {
+        return true
+      }
+    }
+
+    for(let j = 0; j < 4; j++){
+      if(this.positionAvailable()){
+        this.anchorSquare.moveRight()
+      }else {
+        return true
+      }
+    }
+
+    for(let q = 0; q < 2; q++){
+      this.anchorSquare.moveLeft()
+    }
+
+    return false
+  }
+
+  positionAvailable(){
+    return !this.inBounds() || this.board.activePieceCollide()
   }
 
   each(callback, args){
     this.currentRotation().forEach((square) => {
       callback.apply(square, args)
+    })
+  }
+
+  atBottom(){
+    return this.currentRotation().some((square) => {
+      return square.atBottom()
     })
   }
 
@@ -536,15 +580,27 @@ class Board{
   }
 
   animate(){
-    this.activePiece.draw(this.color)
+    this.activePiece.draw()
     return window.setInterval(() => {
       this.activePiece.clearRect()
       this.activePiece.fallDown()
-      if(!this.activePieceInBounds()){
-        this.stopSquare()
+      if(this.squareMustStop()){
+        // So that when the piece hits the bottom
+        // it doesn't instantly become inactive.
+        setTimeout(() => {
+          if(this.squareMustStop()){
+            this.stopSquare()
+            this.activePiece.draw()
+          }
+        }, 300)
       }
       this.activePiece.draw()
     }, 500)
+  }
+
+  squareMustStop(){
+    return this.activePieceAtBottom() ||
+      this.activePieceCollide("down")
   }
 
   stopSquare(){
@@ -556,9 +612,27 @@ class Board{
   cementActivePieceOnGrid(){
     this.activePiece.currentRotation().forEach((square) => {
       const position = square.pos();
-      console.log(position);
-      this.grid[position[0]][position[1]] = square
+      this.grid[position[1]][position[0]] = square
     })
+  }
+
+  activePieceCollide(direction){
+    return this.activePiece.currentRotation().some((square) => {
+      const position = square.pos()
+      let posX = position[1]
+      let posY = position[0]
+      switch(direction){
+        case("down"):
+          posX += 1
+          break;
+      }
+      return !(this.grid[posX][posY] ==
+        __WEBPACK_IMPORTED_MODULE_0__squares_null_square_js__["a" /* default */])
+    })
+  }
+
+  activePieceAtBottom(){
+    return this.activePiece.atBottom()
   }
 
   activePieceInBounds(){
@@ -566,9 +640,9 @@ class Board{
   }
 
   createNullBoard(){
-    for(let i = 0; i < 40; i++){
+    for(let i = 0; i < 20; i++){
       const row = []
-      for(let j = 0; j < 20; j++){
+      for(let j = 0; j < 10; j++){
         row.push(__WEBPACK_IMPORTED_MODULE_0__squares_null_square_js__["a" /* default */])
       }
       this.grid.push(row)

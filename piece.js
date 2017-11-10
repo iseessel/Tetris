@@ -23,22 +23,21 @@ class Piece{
 
   fallDown(){
     this.clearRect()
-    this.anchorSquare.fallDown()
-    if(this.inBounds()){
-      this.each(function(){
-        this.draw()})
-    }else{
-      this.anchorSquare.position[1] -= 1
+    if(!this.atBottom() && !this.board.activePieceCollide("down")){
+      this.anchorSquare.fallDown()
+      this.each(() => {
+        this.draw()
+      })
+      }else{
       this.draw()
-      this.board.stopSquare()
     }
   }
 
   handleLeftKeyPress(){
     this.clearRect()
     this.anchorSquare.moveLeft()
-    if(this.inBounds()){
-      this.each(function(){
+    if(this.inBounds() && !this.board.activePieceCollide()){
+      this.each(() => {
         this.draw()
       })
     }else{
@@ -50,8 +49,8 @@ class Piece{
   handleRightKeyPress(){
     this.clearRect()
     this.anchorSquare.moveRight()
-    if(this.inBounds()){
-      this.each(function(){
+    if(this.inBounds() && !this.board.activePieceCollide()){
+      this.each(() => {
         this.draw()
       })
     }else{
@@ -65,27 +64,68 @@ class Piece{
       this.rotations.length
   }
 
+  unRotate(){
+    this.currentRotationIdx = (this.currentRotationIdx
+      + this.rotations.length - 1) %
+      this.rotations.length
+  }
+
   handleUpKeyPress(){
     this.clearRect()
     this.rotate()
-    if(this.inBounds()){
-      this.each(function(){
+    if(this.inBounds() && !this.board.activePieceCollide()){
+      this.each(() => {
         this.draw()
       })
     }else{
-      while(!this.inBounds()){
-        this.anchorSquare.pos()[0] > 5 ? this.anchorSquare.moveLeft()
-          : this.anchorSquare.moveRight()
-      }
-      this.each(function(){
-        this.draw()
-      })
+      this.wallKick() ? null : this.unRotate()
     }
+    this.each(() => {
+      this.draw()
+    })
+  }
+
+  wallKick(){
+    //Naively search for a position to move to; if are available on one side,
+    //try the other side -- otherwise give up and return to original position.
+    //NB: This naive way results in fewer
+    // computations than checking which side a collision is on.
+    for(let i = 0; i < 2; i ++){
+      if (this.positionAvailable()){
+        this.anchorSquare.moveLeft()
+      }else {
+        return true
+      }
+    }
+
+    for(let j = 0; j < 4; j++){
+      if(this.positionAvailable()){
+        this.anchorSquare.moveRight()
+      }else {
+        return true
+      }
+    }
+
+    for(let q = 0; q < 2; q++){
+      this.anchorSquare.moveLeft()
+    }
+
+    return false
+  }
+
+  positionAvailable(){
+    return !this.inBounds() || this.board.activePieceCollide()
   }
 
   each(callback, args){
     this.currentRotation().forEach((square) => {
       callback.apply(square, args)
+    })
+  }
+
+  atBottom(){
+    return this.currentRotation().some((square) => {
+      return square.atBottom()
     })
   }
 

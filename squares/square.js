@@ -17,13 +17,13 @@ class Square{
   draw(color){
     const drawingCords = this.cordsToPos()
     this.ctx.fillStyle = color
-    this.ctx.fillRect(drawingCords[1], drawingCords[0],
+    this.ctx.fillRect(drawingCords[0], drawingCords[1],
       this.dimensions[0], this.dimensions[1]);
   }
 
   clearRect(){
     const drawingCords = this.cordsToPos()
-    this.ctx.clearRect(drawingCords[1], drawingCords[0],
+    this.ctx.clearRect(drawingCords[0], drawingCords[1],
       this.dimensions[0], this.dimensions[1])
   }
 
@@ -34,6 +34,10 @@ class Square{
 
   cordsToPos(){
     return [this.pos()[0] * 40, this.pos()[1] * 40]
+  }
+
+  atBottom(){
+    return this.pos()[1] === 19
   }
 
 }
