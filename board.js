@@ -5,7 +5,8 @@ import Square from './squares/square.js'
 
 class Board{
 
-  constructor(){
+  constructor(options){
+    this.game = options.game
     this.grid = []
     this.pieces = []
     this.activePiece = null
@@ -17,8 +18,29 @@ class Board{
     return window.setInterval(() => {
       this.activePiece.clearRect()
       this.activePiece.fallDown()
+      if(!this.activePieceInBounds()){
+        this.stopSquare()
+      }
       this.activePiece.draw()
     }, 500)
+  }
+
+  stopSquare(){
+    this.cementActivePieceOnGrid()
+    this.activePiece = null
+    this.game.introducePiece()
+  }
+
+  cementActivePieceOnGrid(){
+    this.activePiece.currentRotation().forEach((square) => {
+      const position = square.pos();
+      console.log(position);
+      this.grid[position[0]][position[1]] = square
+    })
+  }
+
+  activePieceInBounds(){
+    return this.activePiece.inBounds()
   }
 
   createNullBoard(){
@@ -34,13 +56,6 @@ class Board{
   introducePiece(piece){
     this.pieces.push(piece)
     this.activePiece = piece
-    piece.currentRotation().forEach((square) => {
-      if(square instanceof Square){
-        const squarePositionY = square.pos()[0]
-        const squarePositionX = square.pos()[1]
-        this.grid[squarePositionY][squarePositionX] = square
-      }
-    })
   }
 
   handleKeyClicks(){
@@ -58,16 +73,12 @@ class Board{
           this.activePiece ? this.activePiece.handleRightKeyPress() : null
           break
 
-        break
         case 40:
-        this.activePiece ? this.activePiece.fallDown() : null
+          this.activePiece ? this.activePiece.fallDown() : null
           break
       }
     })
   }
-
-
-
 }
 
 export default Board

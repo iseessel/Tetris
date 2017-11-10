@@ -5,17 +5,16 @@ import shuffle from 'lodash/shuffle'
 class Game{
 
   constructor(options){
-    this.board = new Board()
+    this.board = new Board({game: this})
     this.ctx = options.ctx
     this.availablePieces = []
   }
 
   play(){
+    this.createPieces()
+    this.board.handleKeyClicks()
     this.introducePiece();
     this.board.animate()
-    // setTimeout(() => {
-    //   this.introducePiece();
-    // }, 500)
   }
 
   introducePiece(){
@@ -25,12 +24,6 @@ class Game{
         : null
       this.board.introducePiece(this.randomPiece())
     }
-  }
-
-  setup(){
-    this.createPieces()
-    this.board.handleKeyClicks()
-    this.board.animate()
   }
 
   randomPiece(){

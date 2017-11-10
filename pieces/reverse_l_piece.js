@@ -48,7 +48,7 @@ function createReverseLPiece(ctx){
     relativeSquareThreeRight]
 
 
-  const rotations = [rotationOne, rotationTwo, rotationThree]
+  const rotations = [rotationOne, rotationTwo, rotationThree, rotationFour]
 
   const piece = new Piece({rotations: rotations, currentRotationIdx: 0,
       vel: 500, anchorSquare: anchorSquare, color: "#1700FA"})

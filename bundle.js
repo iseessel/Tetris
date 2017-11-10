@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 4);
+/******/ 	return __webpack_require__(__webpack_require__.s = 17);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -87,13 +87,13 @@ class Square{
   draw(color){
     const drawingCords = this.cordsToPos()
     this.ctx.fillStyle = color
-    this.ctx.fillRect(drawingCords[0], drawingCords[1],
+    this.ctx.fillRect(drawingCords[1], drawingCords[0],
       this.dimensions[0], this.dimensions[1]);
   }
 
   clearRect(){
     const drawingCords = this.cordsToPos()
-    this.ctx.clearRect(drawingCords[0], drawingCords[1],
+    this.ctx.clearRect(drawingCords[1], drawingCords[0],
       this.dimensions[0], this.dimensions[1])
   }
 
@@ -113,69 +113,6 @@ class Square{
 
 /***/ }),
 /* 1 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__squares_square_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__piece_js__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__squares_anchor_square_js__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__squares_null_square_js__ = __webpack_require__(3);
-
-
-
-
-
-
-function createIPiece(ctx){
-
-  const anchorSquare = new __WEBPACK_IMPORTED_MODULE_2__squares_anchor_square_js__["a" /* default */]({ctx: ctx, center: [4, 2]})
-
-  const relativeSquareUpOne = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [0, 1], anchorSquare: anchorSquare})
-  const relativeSquareUpTwo = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [0, -1], anchorSquare: anchorSquare})
-  const relativeSquareUpThree = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [0, -2], anchorSquare: anchorSquare})
-
-  const rotationOne = [anchorSquare, relativeSquareUpOne, relativeSquareUpTwo, relativeSquareUpThree]
-
-  const relativeSquareRightOne = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [-1, 0], anchorSquare: anchorSquare})
-  const relativeSquareRightTwo = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [1, 0], anchorSquare: anchorSquare})
-  const relativeSquareRightThree = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [2, -0], anchorSquare: anchorSquare})
-
-  const rotationTwo = [anchorSquare, relativeSquareRightOne,
-      relativeSquareRightTwo, relativeSquareRightThree]
-
-  const relativeSquareDownOne = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [1, 0], anchorSquare: anchorSquare})
-  const relativeSquareDownTwo = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [1, 1], anchorSquare: anchorSquare})
-  const relativeSquareDownThree = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [1, -2], anchorSquare: anchorSquare})
-  const relativeSquareDownFour = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [1, -1], anchorSquare: anchorSquare})
-
-    const rotationThree = [relativeSquareDownOne, relativeSquareDownTwo,
-       relativeSquareDownThree, relativeSquareDownFour]
-
-
-  const rotations = [rotationOne, rotationTwo, rotationThree, rotationTwo]
-
-  const piece = new __WEBPACK_IMPORTED_MODULE_1__piece_js__["a" /* default */]({rotations: rotations, currentRotationIdx: 0,
-      vel: 500, anchorSquare: anchorSquare, color: "#2FFFFF"})
-
-  return piece
-}
-
-/* harmony default export */ __webpack_exports__["a"] = (createIPiece);
-
-
-/***/ }),
-/* 2 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -211,9 +148,8 @@ class Piece{
         this.draw()})
     }else{
       this.anchorSquare.position[1] -= 1
-      this.board.activePiece = null
-      debugger;
       this.draw()
+      this.board.stopSquare()
     }
   }
 
@@ -268,7 +204,7 @@ class Piece{
 
   each(callback, args){
     this.currentRotation().forEach((square) => {
-      square instanceof __WEBPACK_IMPORTED_MODULE_0__squares_square_js__["a" /* default */] ? callback.apply(square, args) : null
+      callback.apply(square, args)
     })
   }
 
@@ -284,70 +220,7 @@ class Piece{
 
 
 /***/ }),
-/* 3 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-class NullSquare{
-
-  constructor(){
-  }
-
-  draw(){
-  }
-
-  fallDown(){
-  }
-
-  clearRect(){
-  }
-
-  inBounds(){
-    return true;
-  }
-
-}
-
-const nullSquareInstance = new NullSquare()
-Object.freeze(nullSquareInstance)
-
-/* harmony default export */ __webpack_exports__["a"] = (nullSquareInstance);
-
-
-/***/ }),
-/* 4 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__pieces_i_piece_js__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__squares_anchor_square_js__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__squares_relative_square_js__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__pieces_t_piece_js__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__piece_js__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__board_js__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__game_js__ = __webpack_require__(15);
-
-
-
-
-
-
-
-
-
-window.addEventListener("DOMContentLoaded", () => {
-  const canvas = document.getElementById("canvas");
-  const ctx = canvas.getContext("2d");
-
-  const game = new __WEBPACK_IMPORTED_MODULE_6__game_js__["a" /* default */]({ctx});
-  game.setup()
-  game.play()
-})
-
-
-/***/ }),
-/* 5 */
+/* 2 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -381,7 +254,7 @@ class AnchorSquare extends __WEBPACK_IMPORTED_MODULE_0__square_js__["a" /* defau
 
 
 /***/ }),
-/* 6 */
+/* 3 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -406,86 +279,166 @@ class RelativeSquare extends __WEBPACK_IMPORTED_MODULE_0__square_js__["a" /* def
 
 
 /***/ }),
+/* 4 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+class NullSquare{
+
+  constructor(){
+  }
+
+  draw(){
+  }
+
+  fallDown(){
+  }
+
+  clearRect(){
+  }
+
+  inBounds(){
+    return true;
+  }
+
+}
+
+const nullSquareInstance = new NullSquare()
+Object.freeze(nullSquareInstance)
+
+/* harmony default export */ __webpack_exports__["a"] = (nullSquareInstance);
+
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Symbol = __webpack_require__(11),
+    getRawTag = __webpack_require__(39),
+    objectToString = __webpack_require__(40);
+
+/** `Object#toString` result references. */
+var nullTag = '[object Null]',
+    undefinedTag = '[object Undefined]';
+
+/** Built-in value references. */
+var symToStringTag = Symbol ? Symbol.toStringTag : undefined;
+
+/**
+ * The base implementation of `getTag` without fallbacks for buggy environments.
+ *
+ * @private
+ * @param {*} value The value to query.
+ * @returns {string} Returns the `toStringTag`.
+ */
+function baseGetTag(value) {
+  if (value == null) {
+    return value === undefined ? undefinedTag : nullTag;
+  }
+  return (symToStringTag && symToStringTag in Object(value))
+    ? getRawTag(value)
+    : objectToString(value);
+}
+
+module.exports = baseGetTag;
+
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports) {
+
+/**
+ * Checks if `value` is object-like. A value is object-like if it's not `null`
+ * and has a `typeof` result of "object".
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
+ * @example
+ *
+ * _.isObjectLike({});
+ * // => true
+ *
+ * _.isObjectLike([1, 2, 3]);
+ * // => true
+ *
+ * _.isObjectLike(_.noop);
+ * // => false
+ *
+ * _.isObjectLike(null);
+ * // => false
+ */
+function isObjectLike(value) {
+  return value != null && typeof value == 'object';
+}
+
+module.exports = isObjectLike;
+
+
+/***/ }),
 /* 7 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__squares_null_square_js__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__piece_js__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__squares_square_js__ = __webpack_require__(0);
-const _defaultPieces = []
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__squares_square_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__piece_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__squares_anchor_square_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__squares_null_square_js__ = __webpack_require__(4);
 
 
 
 
-class Board{
-
-  constructor(){
-    this.grid = []
-    this.pieces = []
-    this.activePiece = null
-    this.createNullBoard()
-  }
-
-  animate(){
-    this.activePiece.draw(this.color)
-    return window.setInterval(() => {
-      this.activePiece.clearRect()
-      this.activePiece.fallDown()
-      this.activePiece.draw()
-    }, 500)
-  }
-
-  createNullBoard(){
-    for(let i = 0; i < 40; i++){
-      const row = []
-      for(let j = 0; j < 20; j++){
-        row.push(__WEBPACK_IMPORTED_MODULE_0__squares_null_square_js__["a" /* default */])
-      }
-      this.grid.push(row)
-    }
-  }
-
-  introducePiece(piece){
-    this.pieces.push(piece)
-    this.activePiece = piece
-    piece.currentRotation().forEach((square) => {
-      if(square instanceof __WEBPACK_IMPORTED_MODULE_2__squares_square_js__["a" /* default */]){
-        const squarePositionY = square.pos()[0]
-        const squarePositionX = square.pos()[1]
-        this.grid[squarePositionY][squarePositionX] = square
-      }
-    })
-  }
-
-  handleKeyClicks(){
-    this.handleKeyPress = window.addEventListener("keydown", (e) => {
-      switch(e.keyCode){
-        case 37:
-          this.activePiece ? this.activePiece.handleLeftKeyPress() : null
-          break
-
-        case 38:
-          this.activePiece ? this.activePiece.handleUpKeyPress() : null
-          break
-
-        case 39:
-          this.activePiece ? this.activePiece.handleRightKeyPress() : null
-          break
-
-        break
-        case 40:
-        this.activePiece ? this.activePiece.fallDown() : null
-          break
-      }
-    })
-  }
 
 
+function createIPiece(ctx){
 
+  const anchorSquare = new __WEBPACK_IMPORTED_MODULE_2__squares_anchor_square_js__["a" /* default */]({ctx: ctx, center: [4, 2]})
+
+  const relativeSquareUpOne = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [0, 1], anchorSquare: anchorSquare})
+  const relativeSquareUpTwo = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [0, -1], anchorSquare: anchorSquare})
+  const relativeSquareUpThree = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [0, -2], anchorSquare: anchorSquare})
+
+  const rotationOne = [anchorSquare, relativeSquareUpOne, relativeSquareUpTwo, relativeSquareUpThree]
+
+  const relativeSquareRightOne = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [-1, 0], anchorSquare: anchorSquare})
+  const relativeSquareRightTwo = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [1, 0], anchorSquare: anchorSquare})
+  const relativeSquareRightThree = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [2, -0], anchorSquare: anchorSquare})
+
+  const rotationTwo = [anchorSquare, relativeSquareRightOne,
+      relativeSquareRightTwo, relativeSquareRightThree]
+
+  const relativeSquareDownOne = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [1, 0], anchorSquare: anchorSquare})
+  const relativeSquareDownTwo = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [1, 1], anchorSquare: anchorSquare})
+  const relativeSquareDownThree = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [1, -2], anchorSquare: anchorSquare})
+  const relativeSquareDownFour = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [1, -1], anchorSquare: anchorSquare})
+
+    const rotationThree = [relativeSquareDownOne, relativeSquareDownTwo,
+       relativeSquareDownThree, relativeSquareDownFour]
+
+
+  const rotations = [rotationOne, rotationTwo, rotationThree, rotationTwo]
+
+  const piece = new __WEBPACK_IMPORTED_MODULE_1__piece_js__["a" /* default */]({rotations: rotations, currentRotationIdx: 0,
+      vel: 500, anchorSquare: anchorSquare, color: "#2FFFFF"})
+
+  return piece
 }
 
-/* harmony default export */ __webpack_exports__["a"] = (Board);
+/* harmony default export */ __webpack_exports__["a"] = (createIPiece);
 
 
 /***/ }),
@@ -494,334 +447,10 @@ class Board{
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__squares_square_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__piece_js__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__squares_anchor_square_js__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__squares_null_square_js__ = __webpack_require__(3);
-
-
-
-
-
-
-function createSquarePiece(ctx){
-
-  const anchorSquare = new __WEBPACK_IMPORTED_MODULE_2__squares_anchor_square_js__["a" /* default */]({ctx: ctx, center: [4, 1]})
-  const relativeSquareOne = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [-1, 0], anchorSquare: anchorSquare})
-  const relativeSquareTwo = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [0, -1], anchorSquare: anchorSquare})
-  const relativeSquareThree = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [-1, -1], anchorSquare: anchorSquare})
-
-  const rotationOne = [anchorSquare, relativeSquareOne, relativeSquareTwo, relativeSquareThree]
-
-  const rotations = [rotationOne]
-
-  const piece = new __WEBPACK_IMPORTED_MODULE_1__piece_js__["a" /* default */]({rotations: rotations, currentRotationIdx: 0,
-      vel: 500, anchorSquare: anchorSquare, color: "#F7FF1F" })
-
-  return piece
-}
-
-/* harmony default export */ __webpack_exports__["a"] = (createSquarePiece);
-
-
-/***/ }),
-/* 9 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__squares_square_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__piece_js__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__squares_anchor_square_js__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__squares_null_square_js__ = __webpack_require__(3);
-
-
-
-
-
-
-function createReverseLPiece(ctx){
-
-  const anchorSquare = new __WEBPACK_IMPORTED_MODULE_2__squares_anchor_square_js__["a" /* default */]({ctx: ctx, center: [4, 1]})
-  const relativeSquareOneUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [-1, 0], anchorSquare: anchorSquare})
-  const relativeSquareTwoUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [1, 0], anchorSquare: anchorSquare})
-  const relativeSquareThreeUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [1, -1], anchorSquare: anchorSquare})
-
-  const rotationOne = [anchorSquare, relativeSquareOneUp,
-    relativeSquareTwoUp, relativeSquareThreeUp]
-
-  const relativeSquareOneDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [0, -1], anchorSquare: anchorSquare})
-  const relativeSquareTwoDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [0, 1], anchorSquare: anchorSquare})
-  const relativeSquareThreeDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [1, 1], anchorSquare: anchorSquare})
-
-  const rotationTwo = [anchorSquare, relativeSquareOneDown, relativeSquareTwoDown,
-    relativeSquareThreeDown]
-
-  const relativeSquareOneLeft = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [1, 0], anchorSquare: anchorSquare})
-  const relativeSquareTwoLeft = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [-1, 0], anchorSquare: anchorSquare})
-  const relativeSquareThreeLeft = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [-1, 1], anchorSquare: anchorSquare})
-
-  const rotationThree = [anchorSquare, relativeSquareOneLeft, relativeSquareTwoLeft,
-    relativeSquareThreeLeft]
-
-  const relativeSquareOneRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [0, -1], anchorSquare: anchorSquare})
-  const relativeSquareTwoRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [0, 1], anchorSquare: anchorSquare})
-  const relativeSquareThreeRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [-1, -1], anchorSquare: anchorSquare})
-
-  const rotationFour= [anchorSquare, relativeSquareOneRight, relativeSquareTwoRight,
-    relativeSquareThreeRight]
-
-
-  const rotations = [rotationOne, rotationTwo, rotationThree]
-
-  const piece = new __WEBPACK_IMPORTED_MODULE_1__piece_js__["a" /* default */]({rotations: rotations, currentRotationIdx: 0,
-      vel: 500, anchorSquare: anchorSquare, color: "#1700FA"})
-
-  return piece
-}
-
-/* harmony default export */ __webpack_exports__["a"] = (createReverseLPiece);
-
-
-/***/ }),
-/* 10 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__squares_square_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__piece_js__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__squares_anchor_square_js__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__squares_null_square_js__ = __webpack_require__(3);
-
-
-
-
-
-
-function createLPiece(ctx){
-
-  const anchorSquare = new __WEBPACK_IMPORTED_MODULE_2__squares_anchor_square_js__["a" /* default */]({ctx: ctx, center: [4, 1]})
-  const relativeSquareOneUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [-1, 0], anchorSquare: anchorSquare})
-  const relativeSquareTwoUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [1, 0], anchorSquare: anchorSquare})
-  const relativeSquareThreeUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [-1, -1], anchorSquare: anchorSquare})
-
-  const rotationOne = [anchorSquare, relativeSquareOneUp,
-    relativeSquareTwoUp, relativeSquareThreeUp]
-
-  const relativeSquareOneDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [0, -1], anchorSquare: anchorSquare})
-  const relativeSquareTwoDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [0, 1], anchorSquare: anchorSquare})
-  const relativeSquareThreeDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [1, -1], anchorSquare: anchorSquare})
-
-  const rotationTwo = [anchorSquare, relativeSquareOneDown, relativeSquareTwoDown,
-    relativeSquareThreeDown]
-
-  const relativeSquareOneLeft = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [1, 0], anchorSquare: anchorSquare})
-  const relativeSquareTwoLeft = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [-1, 0], anchorSquare: anchorSquare})
-  const relativeSquareThreeLeft = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [1, 1], anchorSquare: anchorSquare})
-
-  const rotationThree = [anchorSquare, relativeSquareOneLeft, relativeSquareTwoLeft,
-    relativeSquareThreeLeft]
-
-  const relativeSquareOneRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [0, -1], anchorSquare: anchorSquare})
-  const relativeSquareTwoRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [0, 1], anchorSquare: anchorSquare})
-  const relativeSquareThreeRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [-1, 1], anchorSquare: anchorSquare})
-
-  const rotationFour= [anchorSquare, relativeSquareOneRight, relativeSquareTwoRight,
-    relativeSquareThreeRight]
-
-
-  const rotations = [rotationOne, rotationTwo, rotationThree, rotationFour]
-
-  const piece = new __WEBPACK_IMPORTED_MODULE_1__piece_js__["a" /* default */]({rotations: rotations, currentRotationIdx: 0,
-      vel: 500, anchorSquare: anchorSquare, color: "#FA980B"})
-
-  return piece
-}
-
-/* harmony default export */ __webpack_exports__["a"] = (createLPiece);
-
-
-/***/ }),
-/* 11 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__squares_square_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__piece_js__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__squares_anchor_square_js__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__squares_null_square_js__ = __webpack_require__(3);
-
-
-
-
-
-
-function createZPiece(ctx){
-
-  const anchorSquare = new __WEBPACK_IMPORTED_MODULE_2__squares_anchor_square_js__["a" /* default */]({ctx: ctx, center: [4, 1]})
-  const relativeSquareOneUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [-1, 0], anchorSquare: anchorSquare})
-  const relativeSquareTwoUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [0, -1], anchorSquare: anchorSquare})
-  const relativeSquareThreeUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [1, -1], anchorSquare: anchorSquare})
-
-  const rotationOne = [anchorSquare, relativeSquareOneUp,
-    relativeSquareTwoUp, relativeSquareThreeUp]
-
-  const relativeSquareOneDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [1, 0], anchorSquare: anchorSquare})
-  const relativeSquareTwoDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [0, -1], anchorSquare: anchorSquare})
-  const relativeSquareThreeDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [1, 1], anchorSquare: anchorSquare})
-
-  const rotationTwo = [anchorSquare, relativeSquareOneDown,
-    relativeSquareTwoDown, relativeSquareThreeDown]
-
-  const relativeSquareOneRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [1, 0], anchorSquare: anchorSquare})
-  const relativeSquareTwoRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [0, 1], anchorSquare: anchorSquare})
-  const relativeSquareThreeRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [-1, 1], anchorSquare: anchorSquare})
-
-  const rotationThree = [anchorSquare, relativeSquareOneRight,
-    relativeSquareTwoRight, relativeSquareThreeRight]
-
-  const relativeSquareOneLeft= new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [-1, 0], anchorSquare: anchorSquare})
-  const relativeSquareTwoLeft= new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [-1, -1], anchorSquare: anchorSquare})
-  const relativeSquareThreeLeft= new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [0, 1], anchorSquare: anchorSquare})
-
-  const rotationFour = [anchorSquare, relativeSquareOneLeft,
-    relativeSquareTwoLeft, relativeSquareThreeLeft]
-
-  const rotations = [rotationOne, rotationTwo,
-    rotationThree, rotationFour]
-
-  const piece = new __WEBPACK_IMPORTED_MODULE_1__piece_js__["a" /* default */]({rotations: rotations, currentRotationIdx: 0,
-      vel: 500, anchorSquare: anchorSquare, color: "#F80009"})
-
-  return piece
-}
-
-/* harmony default export */ __webpack_exports__["a"] = (createZPiece);
-
-
-/***/ }),
-/* 12 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__squares_square_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__piece_js__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__squares_anchor_square_js__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__squares_null_square_js__ = __webpack_require__(3);
-
-
-
-
-
-
-function createReverseZPiece(ctx){
-
-  const anchorSquare = new __WEBPACK_IMPORTED_MODULE_2__squares_anchor_square_js__["a" /* default */]({ctx: ctx, center: [4, 1]})
-  const relativeSquareOneUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [0, -1], anchorSquare: anchorSquare})
-  const relativeSquareTwoUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [1, 0], anchorSquare: anchorSquare})
-  const relativeSquareThreeUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [-1, -1], anchorSquare: anchorSquare})
-
-  const rotationOne = [anchorSquare, relativeSquareOneUp,
-    relativeSquareTwoUp, relativeSquareThreeUp]
-
-  const relativeSquareOneDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [0, 1], anchorSquare: anchorSquare})
-  const relativeSquareTwoDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [1, 0], anchorSquare: anchorSquare})
-  const relativeSquareThreeDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [1, -1], anchorSquare: anchorSquare})
-
-  const rotationTwo = [anchorSquare, relativeSquareOneDown,
-    relativeSquareTwoDown, relativeSquareThreeDown]
-
-  const relativeSquareOneRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [-1, 0], anchorSquare: anchorSquare})
-  const relativeSquareTwoRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [0, 1], anchorSquare: anchorSquare})
-  const relativeSquareThreeRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [1, 1], anchorSquare: anchorSquare})
-
-  const rotationThree = [anchorSquare, relativeSquareOneRight,
-    relativeSquareTwoRight, relativeSquareThreeRight]
-
-  const relativeSquareOneLeft= new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [-1, 0], anchorSquare: anchorSquare})
-  const relativeSquareTwoLeft= new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [0, -1], anchorSquare: anchorSquare})
-  const relativeSquareThreeLeft= new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [-1, 1], anchorSquare: anchorSquare})
-
-  const rotationFour = [anchorSquare, relativeSquareOneLeft,
-    relativeSquareTwoLeft, relativeSquareThreeLeft]
-
-  const rotations = [rotationOne, rotationTwo,
-    rotationThree, rotationFour]
-
-  const piece = new __WEBPACK_IMPORTED_MODULE_1__piece_js__["a" /* default */]({rotations: rotations, currentRotationIdx: 0,
-      vel: 500, anchorSquare: anchorSquare, color: "#27FF09" })
-
-  return piece
-}
-
-/* harmony default export */ __webpack_exports__["a"] = (createReverseZPiece);
-
-
-/***/ }),
-/* 13 */,
-/* 14 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__squares_square_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__piece_js__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__squares_anchor_square_js__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__squares_null_square_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__piece_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__squares_anchor_square_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__squares_null_square_js__ = __webpack_require__(4);
 
 
 
@@ -884,169 +513,104 @@ function createTPiece(ctx){
 
 
 /***/ }),
-/* 15 */
+/* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__board_js__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__pieces_create_pieces_js__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash_shuffle__ = __webpack_require__(26);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash_shuffle___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_lodash_shuffle__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__squares_null_square_js__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__piece_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__squares_square_js__ = __webpack_require__(0);
+const _defaultPieces = []
 
 
 
 
-class Game{
+class Board{
 
   constructor(options){
-    this.board = new __WEBPACK_IMPORTED_MODULE_0__board_js__["a" /* default */]()
-    this.ctx = options.ctx
-    this.availablePieces = []
+    this.game = options.game
+    this.grid = []
+    this.pieces = []
+    this.activePiece = null
+    this.createNullBoard()
   }
 
-  play(){
-    this.introducePiece();
-    this.board.animate()
-    // setTimeout(() => {
-    //   this.introducePiece();
-    // }, 500)
+  animate(){
+    this.activePiece.draw(this.color)
+    return window.setInterval(() => {
+      this.activePiece.clearRect()
+      this.activePiece.fallDown()
+      if(!this.activePieceInBounds()){
+        this.stopSquare()
+      }
+      this.activePiece.draw()
+    }, 500)
   }
 
-  introducePiece(){
-    if(!this.board.activePiece){
-      this.availablePieces.length === 0
-        ? this.createPiece()
-        : null
-      this.board.introducePiece(this.randomPiece())
+  stopSquare(){
+    this.cementActivePieceOnGrid()
+    this.activePiece = null
+    this.game.introducePiece()
+  }
+
+  cementActivePieceOnGrid(){
+    this.activePiece.currentRotation().forEach((square) => {
+      const position = square.pos();
+      console.log(position);
+      this.grid[position[0]][position[1]] = square
+    })
+  }
+
+  activePieceInBounds(){
+    return this.activePiece.inBounds()
+  }
+
+  createNullBoard(){
+    for(let i = 0; i < 40; i++){
+      const row = []
+      for(let j = 0; j < 20; j++){
+        row.push(__WEBPACK_IMPORTED_MODULE_0__squares_null_square_js__["a" /* default */])
+      }
+      this.grid.push(row)
     }
   }
 
-  setup(){
-    this.createPieces()
-    this.board.handleKeyClicks()
-    this.board.animate()
+  introducePiece(piece){
+    this.pieces.push(piece)
+    this.activePiece = piece
   }
 
-  randomPiece(){
-    const randomEl = this.availablePieces[0]
-    this.availablePieces.splice(0, 1)
-    return randomEl
-  }
+  handleKeyClicks(){
+    this.handleKeyPress = window.addEventListener("keydown", (e) => {
+      switch(e.keyCode){
+        case 37:
+          this.activePiece ? this.activePiece.handleLeftKeyPress() : null
+          break
 
-  createPieces(){
-    for(let i = 0; i < 4; i++){
-      __WEBPACK_IMPORTED_MODULE_1__pieces_create_pieces_js__["a" /* default */].forEach((pieceConstructor) => {
-        const piece = pieceConstructor(this.ctx)
-        piece.board = this.board
-        this.availablePieces.push(piece)
-      })
-    }
-    this.availablePieces = __WEBPACK_IMPORTED_MODULE_2_lodash_shuffle___default()(this.availablePieces)
+        case 38:
+          this.activePiece ? this.activePiece.handleUpKeyPress() : null
+          break
+
+        case 39:
+          this.activePiece ? this.activePiece.handleRightKeyPress() : null
+          break
+
+        case 40:
+          this.activePiece ? this.activePiece.fallDown() : null
+          break
+      }
+    })
   }
 }
 
-/* harmony default export */ __webpack_exports__["a"] = (Game);
+/* harmony default export */ __webpack_exports__["a"] = (Board);
 
 
 /***/ }),
-/* 16 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__i_piece_js__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__l_piece_js__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__reverse_l_piece_js__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__reverse_z_piece_js__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__square_piece_js__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__t_piece_js__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__z_piece_js__ = __webpack_require__(11);
-
-
-
-
-
-
-
-
-
-/* harmony default export */ __webpack_exports__["a"] = ([__WEBPACK_IMPORTED_MODULE_0__i_piece_js__["a" /* default */], __WEBPACK_IMPORTED_MODULE_1__l_piece_js__["a" /* default */], __WEBPACK_IMPORTED_MODULE_2__reverse_l_piece_js__["a" /* default */],
-  __WEBPACK_IMPORTED_MODULE_3__reverse_z_piece_js__["a" /* default */], __WEBPACK_IMPORTED_MODULE_4__square_piece_js__["a" /* default */], __WEBPACK_IMPORTED_MODULE_5__t_piece_js__["a" /* default */], __WEBPACK_IMPORTED_MODULE_6__z_piece_js__["a" /* default */]]);
-
-
-/***/ }),
-/* 17 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Symbol = __webpack_require__(20),
-    getRawTag = __webpack_require__(40),
-    objectToString = __webpack_require__(41);
-
-/** `Object#toString` result references. */
-var nullTag = '[object Null]',
-    undefinedTag = '[object Undefined]';
-
-/** Built-in value references. */
-var symToStringTag = Symbol ? Symbol.toStringTag : undefined;
-
-/**
- * The base implementation of `getTag` without fallbacks for buggy environments.
- *
- * @private
- * @param {*} value The value to query.
- * @returns {string} Returns the `toStringTag`.
- */
-function baseGetTag(value) {
-  if (value == null) {
-    return value === undefined ? undefinedTag : nullTag;
-  }
-  return (symToStringTag && symToStringTag in Object(value))
-    ? getRawTag(value)
-    : objectToString(value);
-}
-
-module.exports = baseGetTag;
-
-
-/***/ }),
-/* 18 */
-/***/ (function(module, exports) {
-
-/**
- * Checks if `value` is object-like. A value is object-like if it's not `null`
- * and has a `typeof` result of "object".
- *
- * @static
- * @memberOf _
- * @since 4.0.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
- * @example
- *
- * _.isObjectLike({});
- * // => true
- *
- * _.isObjectLike([1, 2, 3]);
- * // => true
- *
- * _.isObjectLike(_.noop);
- * // => false
- *
- * _.isObjectLike(null);
- * // => false
- */
-function isObjectLike(value) {
-  return value != null && typeof value == 'object';
-}
-
-module.exports = isObjectLike;
-
-
-/***/ }),
-/* 19 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var baseRandom = __webpack_require__(29);
+var baseRandom = __webpack_require__(28);
 
 /**
  * A specialized version of `_.shuffle` which mutates and sets the size of `array`.
@@ -1077,10 +641,10 @@ module.exports = shuffleSelf;
 
 
 /***/ }),
-/* 20 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var root = __webpack_require__(21);
+var root = __webpack_require__(12);
 
 /** Built-in value references. */
 var Symbol = root.Symbol;
@@ -1089,10 +653,10 @@ module.exports = Symbol;
 
 
 /***/ }),
-/* 21 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var freeGlobal = __webpack_require__(22);
+var freeGlobal = __webpack_require__(13);
 
 /** Detect free variable `self`. */
 var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
@@ -1104,7 +668,7 @@ module.exports = root;
 
 
 /***/ }),
-/* 22 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/** Detect free variable `global` from Node.js. */
@@ -1112,10 +676,10 @@ var freeGlobal = typeof global == 'object' && global && global.Object === Object
 
 module.exports = freeGlobal;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(39)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(38)))
 
 /***/ }),
-/* 23 */
+/* 14 */
 /***/ (function(module, exports) {
 
 /**
@@ -1147,7 +711,7 @@ module.exports = isArray;
 
 
 /***/ }),
-/* 24 */
+/* 15 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -1175,7 +739,7 @@ module.exports = function(module) {
 
 
 /***/ }),
-/* 25 */
+/* 16 */
 /***/ (function(module, exports) {
 
 /** Used as references for various `Number` constants. */
@@ -1216,12 +780,448 @@ module.exports = isLength;
 
 
 /***/ }),
-/* 26 */
+/* 17 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__pieces_i_piece_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__squares_anchor_square_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__squares_relative_square_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__pieces_t_piece_js__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__piece_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__board_js__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__game_js__ = __webpack_require__(18);
+
+
+
+
+
+
+
+
+
+window.addEventListener("DOMContentLoaded", () => {
+  const canvas = document.getElementById("canvas");
+  const ctx = canvas.getContext("2d");
+  const game = new __WEBPACK_IMPORTED_MODULE_6__game_js__["a" /* default */]({ctx});
+  game.play()
+})
+
+
+/***/ }),
+/* 18 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__board_js__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__pieces_create_pieces_js__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash_shuffle__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash_shuffle___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_lodash_shuffle__);
+
+
+
+
+class Game{
+
+  constructor(options){
+    this.board = new __WEBPACK_IMPORTED_MODULE_0__board_js__["a" /* default */]({game: this})
+    this.ctx = options.ctx
+    this.availablePieces = []
+  }
+
+  play(){
+    this.createPieces()
+    this.board.handleKeyClicks()
+    this.introducePiece();
+    this.board.animate()
+  }
+
+  introducePiece(){
+    if(!this.board.activePiece){
+      this.availablePieces.length === 0
+        ? this.createPiece()
+        : null
+      this.board.introducePiece(this.randomPiece())
+    }
+  }
+
+  randomPiece(){
+    const randomEl = this.availablePieces[0]
+    this.availablePieces.splice(0, 1)
+    return randomEl
+  }
+
+  createPieces(){
+    for(let i = 0; i < 4; i++){
+      __WEBPACK_IMPORTED_MODULE_1__pieces_create_pieces_js__["a" /* default */].forEach((pieceConstructor) => {
+        const piece = pieceConstructor(this.ctx)
+        piece.board = this.board
+        this.availablePieces.push(piece)
+      })
+    }
+    this.availablePieces = __WEBPACK_IMPORTED_MODULE_2_lodash_shuffle___default()(this.availablePieces)
+  }
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (Game);
+
+
+/***/ }),
+/* 19 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__i_piece_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__l_piece_js__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__reverse_l_piece_js__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__reverse_z_piece_js__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__square_piece_js__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__t_piece_js__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__z_piece_js__ = __webpack_require__(24);
+
+
+
+
+
+
+
+
+
+/* harmony default export */ __webpack_exports__["a"] = ([__WEBPACK_IMPORTED_MODULE_0__i_piece_js__["a" /* default */], __WEBPACK_IMPORTED_MODULE_1__l_piece_js__["a" /* default */], __WEBPACK_IMPORTED_MODULE_2__reverse_l_piece_js__["a" /* default */],
+  __WEBPACK_IMPORTED_MODULE_3__reverse_z_piece_js__["a" /* default */], __WEBPACK_IMPORTED_MODULE_4__square_piece_js__["a" /* default */], __WEBPACK_IMPORTED_MODULE_5__t_piece_js__["a" /* default */], __WEBPACK_IMPORTED_MODULE_6__z_piece_js__["a" /* default */]]);
+
+
+/***/ }),
+/* 20 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__squares_square_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__piece_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__squares_anchor_square_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__squares_null_square_js__ = __webpack_require__(4);
+
+
+
+
+
+
+function createLPiece(ctx){
+
+  const anchorSquare = new __WEBPACK_IMPORTED_MODULE_2__squares_anchor_square_js__["a" /* default */]({ctx: ctx, center: [4, 1]})
+  const relativeSquareOneUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [-1, 0], anchorSquare: anchorSquare})
+  const relativeSquareTwoUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [1, 0], anchorSquare: anchorSquare})
+  const relativeSquareThreeUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [-1, -1], anchorSquare: anchorSquare})
+
+  const rotationOne = [anchorSquare, relativeSquareOneUp,
+    relativeSquareTwoUp, relativeSquareThreeUp]
+
+  const relativeSquareOneDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [0, -1], anchorSquare: anchorSquare})
+  const relativeSquareTwoDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [0, 1], anchorSquare: anchorSquare})
+  const relativeSquareThreeDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [1, -1], anchorSquare: anchorSquare})
+
+  const rotationTwo = [anchorSquare, relativeSquareOneDown, relativeSquareTwoDown,
+    relativeSquareThreeDown]
+
+  const relativeSquareOneLeft = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [1, 0], anchorSquare: anchorSquare})
+  const relativeSquareTwoLeft = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [-1, 0], anchorSquare: anchorSquare})
+  const relativeSquareThreeLeft = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [1, 1], anchorSquare: anchorSquare})
+
+  const rotationThree = [anchorSquare, relativeSquareOneLeft, relativeSquareTwoLeft,
+    relativeSquareThreeLeft]
+
+  const relativeSquareOneRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [0, -1], anchorSquare: anchorSquare})
+  const relativeSquareTwoRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [0, 1], anchorSquare: anchorSquare})
+  const relativeSquareThreeRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [-1, 1], anchorSquare: anchorSquare})
+
+  const rotationFour= [anchorSquare, relativeSquareOneRight, relativeSquareTwoRight,
+    relativeSquareThreeRight]
+
+
+  const rotations = [rotationOne, rotationTwo, rotationThree, rotationFour]
+
+  const piece = new __WEBPACK_IMPORTED_MODULE_1__piece_js__["a" /* default */]({rotations: rotations, currentRotationIdx: 0,
+      vel: 500, anchorSquare: anchorSquare, color: "#FA980B"})
+
+  return piece
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (createLPiece);
+
+
+/***/ }),
+/* 21 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__squares_square_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__piece_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__squares_anchor_square_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__squares_null_square_js__ = __webpack_require__(4);
+
+
+
+
+
+
+function createReverseLPiece(ctx){
+
+  const anchorSquare = new __WEBPACK_IMPORTED_MODULE_2__squares_anchor_square_js__["a" /* default */]({ctx: ctx, center: [4, 1]})
+  const relativeSquareOneUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [-1, 0], anchorSquare: anchorSquare})
+  const relativeSquareTwoUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [1, 0], anchorSquare: anchorSquare})
+  const relativeSquareThreeUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [1, -1], anchorSquare: anchorSquare})
+
+  const rotationOne = [anchorSquare, relativeSquareOneUp,
+    relativeSquareTwoUp, relativeSquareThreeUp]
+
+  const relativeSquareOneDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [0, -1], anchorSquare: anchorSquare})
+  const relativeSquareTwoDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [0, 1], anchorSquare: anchorSquare})
+  const relativeSquareThreeDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [1, 1], anchorSquare: anchorSquare})
+
+  const rotationTwo = [anchorSquare, relativeSquareOneDown, relativeSquareTwoDown,
+    relativeSquareThreeDown]
+
+  const relativeSquareOneLeft = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [1, 0], anchorSquare: anchorSquare})
+  const relativeSquareTwoLeft = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [-1, 0], anchorSquare: anchorSquare})
+  const relativeSquareThreeLeft = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [-1, 1], anchorSquare: anchorSquare})
+
+  const rotationThree = [anchorSquare, relativeSquareOneLeft, relativeSquareTwoLeft,
+    relativeSquareThreeLeft]
+
+  const relativeSquareOneRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [0, -1], anchorSquare: anchorSquare})
+  const relativeSquareTwoRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [0, 1], anchorSquare: anchorSquare})
+  const relativeSquareThreeRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [-1, -1], anchorSquare: anchorSquare})
+
+  const rotationFour= [anchorSquare, relativeSquareOneRight, relativeSquareTwoRight,
+    relativeSquareThreeRight]
+
+
+  const rotations = [rotationOne, rotationTwo, rotationThree, rotationFour]
+
+  const piece = new __WEBPACK_IMPORTED_MODULE_1__piece_js__["a" /* default */]({rotations: rotations, currentRotationIdx: 0,
+      vel: 500, anchorSquare: anchorSquare, color: "#1700FA"})
+
+  return piece
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (createReverseLPiece);
+
+
+/***/ }),
+/* 22 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__squares_square_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__piece_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__squares_anchor_square_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__squares_null_square_js__ = __webpack_require__(4);
+
+
+
+
+
+
+function createReverseZPiece(ctx){
+
+  const anchorSquare = new __WEBPACK_IMPORTED_MODULE_2__squares_anchor_square_js__["a" /* default */]({ctx: ctx, center: [4, 1]})
+  const relativeSquareOneUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [0, -1], anchorSquare: anchorSquare})
+  const relativeSquareTwoUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [1, 0], anchorSquare: anchorSquare})
+  const relativeSquareThreeUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [-1, -1], anchorSquare: anchorSquare})
+
+  const rotationOne = [anchorSquare, relativeSquareOneUp,
+    relativeSquareTwoUp, relativeSquareThreeUp]
+
+  const relativeSquareOneDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [0, 1], anchorSquare: anchorSquare})
+  const relativeSquareTwoDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [1, 0], anchorSquare: anchorSquare})
+  const relativeSquareThreeDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [1, -1], anchorSquare: anchorSquare})
+
+  const rotationTwo = [anchorSquare, relativeSquareOneDown,
+    relativeSquareTwoDown, relativeSquareThreeDown]
+
+  const relativeSquareOneRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [-1, 0], anchorSquare: anchorSquare})
+  const relativeSquareTwoRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [0, 1], anchorSquare: anchorSquare})
+  const relativeSquareThreeRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [1, 1], anchorSquare: anchorSquare})
+
+  const rotationThree = [anchorSquare, relativeSquareOneRight,
+    relativeSquareTwoRight, relativeSquareThreeRight]
+
+  const relativeSquareOneLeft= new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [-1, 0], anchorSquare: anchorSquare})
+  const relativeSquareTwoLeft= new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [0, -1], anchorSquare: anchorSquare})
+  const relativeSquareThreeLeft= new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [-1, 1], anchorSquare: anchorSquare})
+
+  const rotationFour = [anchorSquare, relativeSquareOneLeft,
+    relativeSquareTwoLeft, relativeSquareThreeLeft]
+
+  const rotations = [rotationOne, rotationTwo,
+    rotationThree, rotationFour]
+
+  const piece = new __WEBPACK_IMPORTED_MODULE_1__piece_js__["a" /* default */]({rotations: rotations, currentRotationIdx: 0,
+      vel: 500, anchorSquare: anchorSquare, color: "#27FF09" })
+
+  return piece
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (createReverseZPiece);
+
+
+/***/ }),
+/* 23 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__squares_square_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__piece_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__squares_anchor_square_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__squares_null_square_js__ = __webpack_require__(4);
+
+
+
+
+
+
+function createSquarePiece(ctx){
+
+  const anchorSquare = new __WEBPACK_IMPORTED_MODULE_2__squares_anchor_square_js__["a" /* default */]({ctx: ctx, center: [4, 1]})
+  const relativeSquareOne = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [-1, 0], anchorSquare: anchorSquare})
+  const relativeSquareTwo = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [0, -1], anchorSquare: anchorSquare})
+  const relativeSquareThree = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [-1, -1], anchorSquare: anchorSquare})
+
+  const rotationOne = [anchorSquare, relativeSquareOne, relativeSquareTwo, relativeSquareThree]
+
+  const rotations = [rotationOne]
+
+  const piece = new __WEBPACK_IMPORTED_MODULE_1__piece_js__["a" /* default */]({rotations: rotations, currentRotationIdx: 0,
+      vel: 500, anchorSquare: anchorSquare, color: "#F7FF1F" })
+
+  return piece
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (createSquarePiece);
+
+
+/***/ }),
+/* 24 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__squares_square_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__piece_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__squares_anchor_square_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__squares_null_square_js__ = __webpack_require__(4);
+
+
+
+
+
+
+function createZPiece(ctx){
+
+  const anchorSquare = new __WEBPACK_IMPORTED_MODULE_2__squares_anchor_square_js__["a" /* default */]({ctx: ctx, center: [4, 1]})
+  const relativeSquareOneUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [-1, 0], anchorSquare: anchorSquare})
+  const relativeSquareTwoUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [0, -1], anchorSquare: anchorSquare})
+  const relativeSquareThreeUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [1, -1], anchorSquare: anchorSquare})
+
+  const rotationOne = [anchorSquare, relativeSquareOneUp,
+    relativeSquareTwoUp, relativeSquareThreeUp]
+
+  const relativeSquareOneDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [1, 0], anchorSquare: anchorSquare})
+  const relativeSquareTwoDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [0, -1], anchorSquare: anchorSquare})
+  const relativeSquareThreeDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [1, 1], anchorSquare: anchorSquare})
+
+  const rotationTwo = [anchorSquare, relativeSquareOneDown,
+    relativeSquareTwoDown, relativeSquareThreeDown]
+
+  const relativeSquareOneRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [1, 0], anchorSquare: anchorSquare})
+  const relativeSquareTwoRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [0, 1], anchorSquare: anchorSquare})
+  const relativeSquareThreeRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [-1, 1], anchorSquare: anchorSquare})
+
+  const rotationThree = [anchorSquare, relativeSquareOneRight,
+    relativeSquareTwoRight, relativeSquareThreeRight]
+
+  const relativeSquareOneLeft= new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [-1, 0], anchorSquare: anchorSquare})
+  const relativeSquareTwoLeft= new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [-1, -1], anchorSquare: anchorSquare})
+  const relativeSquareThreeLeft= new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+    offset: [0, 1], anchorSquare: anchorSquare})
+
+  const rotationFour = [anchorSquare, relativeSquareOneLeft,
+    relativeSquareTwoLeft, relativeSquareThreeLeft]
+
+  const rotations = [rotationOne, rotationTwo,
+    rotationThree, rotationFour]
+
+  const piece = new __WEBPACK_IMPORTED_MODULE_1__piece_js__["a" /* default */]({rotations: rotations, currentRotationIdx: 0,
+      vel: 500, anchorSquare: anchorSquare, color: "#F80009"})
+
+  return piece
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (createZPiece);
+
+
+/***/ }),
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var arrayShuffle = __webpack_require__(27),
-    baseShuffle = __webpack_require__(30),
-    isArray = __webpack_require__(23);
+var arrayShuffle = __webpack_require__(26),
+    baseShuffle = __webpack_require__(29),
+    isArray = __webpack_require__(14);
 
 /**
  * Creates an array of shuffled values, using a version of the
@@ -1247,11 +1247,11 @@ module.exports = shuffle;
 
 
 /***/ }),
-/* 27 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var copyArray = __webpack_require__(28),
-    shuffleSelf = __webpack_require__(19);
+var copyArray = __webpack_require__(27),
+    shuffleSelf = __webpack_require__(10);
 
 /**
  * A specialized version of `_.shuffle` for arrays.
@@ -1268,7 +1268,7 @@ module.exports = arrayShuffle;
 
 
 /***/ }),
-/* 28 */
+/* 27 */
 /***/ (function(module, exports) {
 
 /**
@@ -1294,7 +1294,7 @@ module.exports = copyArray;
 
 
 /***/ }),
-/* 29 */
+/* 28 */
 /***/ (function(module, exports) {
 
 /* Built-in method references for those with the same name as other `lodash` methods. */
@@ -1318,11 +1318,11 @@ module.exports = baseRandom;
 
 
 /***/ }),
-/* 30 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var shuffleSelf = __webpack_require__(19),
-    values = __webpack_require__(31);
+var shuffleSelf = __webpack_require__(10),
+    values = __webpack_require__(30);
 
 /**
  * The base implementation of `_.shuffle`.
@@ -1339,11 +1339,11 @@ module.exports = baseShuffle;
 
 
 /***/ }),
-/* 31 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseValues = __webpack_require__(32),
-    keys = __webpack_require__(34);
+var baseValues = __webpack_require__(31),
+    keys = __webpack_require__(33);
 
 /**
  * Creates an array of the own enumerable string keyed property values of `object`.
@@ -1379,10 +1379,10 @@ module.exports = values;
 
 
 /***/ }),
-/* 32 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var arrayMap = __webpack_require__(33);
+var arrayMap = __webpack_require__(32);
 
 /**
  * The base implementation of `_.values` and `_.valuesIn` which creates an
@@ -1404,7 +1404,7 @@ module.exports = baseValues;
 
 
 /***/ }),
-/* 33 */
+/* 32 */
 /***/ (function(module, exports) {
 
 /**
@@ -1431,12 +1431,12 @@ module.exports = arrayMap;
 
 
 /***/ }),
-/* 34 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var arrayLikeKeys = __webpack_require__(35),
-    baseKeys = __webpack_require__(49),
-    isArrayLike = __webpack_require__(53);
+var arrayLikeKeys = __webpack_require__(34),
+    baseKeys = __webpack_require__(48),
+    isArrayLike = __webpack_require__(52);
 
 /**
  * Creates an array of the own enumerable property names of `object`.
@@ -1474,15 +1474,15 @@ module.exports = keys;
 
 
 /***/ }),
-/* 35 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseTimes = __webpack_require__(36),
-    isArguments = __webpack_require__(37),
-    isArray = __webpack_require__(23),
-    isBuffer = __webpack_require__(42),
-    isIndex = __webpack_require__(44),
-    isTypedArray = __webpack_require__(45);
+var baseTimes = __webpack_require__(35),
+    isArguments = __webpack_require__(36),
+    isArray = __webpack_require__(14),
+    isBuffer = __webpack_require__(41),
+    isIndex = __webpack_require__(43),
+    isTypedArray = __webpack_require__(44);
 
 /** Used for built-in method references. */
 var objectProto = Object.prototype;
@@ -1529,7 +1529,7 @@ module.exports = arrayLikeKeys;
 
 
 /***/ }),
-/* 36 */
+/* 35 */
 /***/ (function(module, exports) {
 
 /**
@@ -1555,11 +1555,11 @@ module.exports = baseTimes;
 
 
 /***/ }),
-/* 37 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseIsArguments = __webpack_require__(38),
-    isObjectLike = __webpack_require__(18);
+var baseIsArguments = __webpack_require__(37),
+    isObjectLike = __webpack_require__(6);
 
 /** Used for built-in method references. */
 var objectProto = Object.prototype;
@@ -1597,11 +1597,11 @@ module.exports = isArguments;
 
 
 /***/ }),
-/* 38 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(17),
-    isObjectLike = __webpack_require__(18);
+var baseGetTag = __webpack_require__(5),
+    isObjectLike = __webpack_require__(6);
 
 /** `Object#toString` result references. */
 var argsTag = '[object Arguments]';
@@ -1621,7 +1621,7 @@ module.exports = baseIsArguments;
 
 
 /***/ }),
-/* 39 */
+/* 38 */
 /***/ (function(module, exports) {
 
 var g;
@@ -1648,10 +1648,10 @@ module.exports = g;
 
 
 /***/ }),
-/* 40 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Symbol = __webpack_require__(20);
+var Symbol = __webpack_require__(11);
 
 /** Used for built-in method references. */
 var objectProto = Object.prototype;
@@ -1700,7 +1700,7 @@ module.exports = getRawTag;
 
 
 /***/ }),
-/* 41 */
+/* 40 */
 /***/ (function(module, exports) {
 
 /** Used for built-in method references. */
@@ -1728,11 +1728,11 @@ module.exports = objectToString;
 
 
 /***/ }),
-/* 42 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(module) {var root = __webpack_require__(21),
-    stubFalse = __webpack_require__(43);
+/* WEBPACK VAR INJECTION */(function(module) {var root = __webpack_require__(12),
+    stubFalse = __webpack_require__(42);
 
 /** Detect free variable `exports`. */
 var freeExports = typeof exports == 'object' && exports && !exports.nodeType && exports;
@@ -1770,10 +1770,10 @@ var isBuffer = nativeIsBuffer || stubFalse;
 
 module.exports = isBuffer;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(24)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(15)(module)))
 
 /***/ }),
-/* 43 */
+/* 42 */
 /***/ (function(module, exports) {
 
 /**
@@ -1797,7 +1797,7 @@ module.exports = stubFalse;
 
 
 /***/ }),
-/* 44 */
+/* 43 */
 /***/ (function(module, exports) {
 
 /** Used as references for various `Number` constants. */
@@ -1825,12 +1825,12 @@ module.exports = isIndex;
 
 
 /***/ }),
-/* 45 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseIsTypedArray = __webpack_require__(46),
-    baseUnary = __webpack_require__(47),
-    nodeUtil = __webpack_require__(48);
+var baseIsTypedArray = __webpack_require__(45),
+    baseUnary = __webpack_require__(46),
+    nodeUtil = __webpack_require__(47);
 
 /* Node.js helper references. */
 var nodeIsTypedArray = nodeUtil && nodeUtil.isTypedArray;
@@ -1858,12 +1858,12 @@ module.exports = isTypedArray;
 
 
 /***/ }),
-/* 46 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(17),
-    isLength = __webpack_require__(25),
-    isObjectLike = __webpack_require__(18);
+var baseGetTag = __webpack_require__(5),
+    isLength = __webpack_require__(16),
+    isObjectLike = __webpack_require__(6);
 
 /** `Object#toString` result references. */
 var argsTag = '[object Arguments]',
@@ -1924,7 +1924,7 @@ module.exports = baseIsTypedArray;
 
 
 /***/ }),
-/* 47 */
+/* 46 */
 /***/ (function(module, exports) {
 
 /**
@@ -1944,10 +1944,10 @@ module.exports = baseUnary;
 
 
 /***/ }),
-/* 48 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(module) {var freeGlobal = __webpack_require__(22);
+/* WEBPACK VAR INJECTION */(function(module) {var freeGlobal = __webpack_require__(13);
 
 /** Detect free variable `exports`. */
 var freeExports = typeof exports == 'object' && exports && !exports.nodeType && exports;
@@ -1970,14 +1970,14 @@ var nodeUtil = (function() {
 
 module.exports = nodeUtil;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(24)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(15)(module)))
 
 /***/ }),
-/* 49 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isPrototype = __webpack_require__(50),
-    nativeKeys = __webpack_require__(51);
+var isPrototype = __webpack_require__(49),
+    nativeKeys = __webpack_require__(50);
 
 /** Used for built-in method references. */
 var objectProto = Object.prototype;
@@ -2009,7 +2009,7 @@ module.exports = baseKeys;
 
 
 /***/ }),
-/* 50 */
+/* 49 */
 /***/ (function(module, exports) {
 
 /** Used for built-in method references. */
@@ -2033,10 +2033,10 @@ module.exports = isPrototype;
 
 
 /***/ }),
-/* 51 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var overArg = __webpack_require__(52);
+var overArg = __webpack_require__(51);
 
 /* Built-in method references for those with the same name as other `lodash` methods. */
 var nativeKeys = overArg(Object.keys, Object);
@@ -2045,7 +2045,7 @@ module.exports = nativeKeys;
 
 
 /***/ }),
-/* 52 */
+/* 51 */
 /***/ (function(module, exports) {
 
 /**
@@ -2066,11 +2066,11 @@ module.exports = overArg;
 
 
 /***/ }),
-/* 53 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isFunction = __webpack_require__(54),
-    isLength = __webpack_require__(25);
+var isFunction = __webpack_require__(53),
+    isLength = __webpack_require__(16);
 
 /**
  * Checks if `value` is array-like. A value is considered array-like if it's
@@ -2105,11 +2105,11 @@ module.exports = isArrayLike;
 
 
 /***/ }),
-/* 54 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(17),
-    isObject = __webpack_require__(55);
+var baseGetTag = __webpack_require__(5),
+    isObject = __webpack_require__(54);
 
 /** `Object#toString` result references. */
 var asyncTag = '[object AsyncFunction]',
@@ -2148,7 +2148,7 @@ module.exports = isFunction;
 
 
 /***/ }),
-/* 55 */
+/* 54 */
 /***/ (function(module, exports) {
 
 /**

@@ -29,9 +29,8 @@ class Piece{
         this.draw()})
     }else{
       this.anchorSquare.position[1] -= 1
-      this.board.activePiece = null
-      debugger;
       this.draw()
+      this.board.stopSquare()
     }
   }
 
@@ -86,7 +85,7 @@ class Piece{
 
   each(callback, args){
     this.currentRotation().forEach((square) => {
-      square instanceof Square ? callback.apply(square, args) : null
+      callback.apply(square, args)
     })
   }
 
