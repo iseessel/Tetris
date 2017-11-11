@@ -3,10 +3,12 @@ import nullSquareInstance from './squares/null_square.js'
 import Piece from './piece.js'
 import Square from './squares/square.js'
 
+
 class Board{
 
   constructor(options){
     this.game = options.game
+    this.ctx = options.ctx
     this.grid = []
     this.pieces = []
     this.activePiece = null
@@ -16,11 +18,12 @@ class Board{
   animate(){
     this.activePiece.draw()
     return window.setInterval(() => {
+      this.checkForRowClear()
       this.activePiece.clearRect()
       this.activePiece.fallDown()
       if(this.squareMustStop()){
-        // So that when the piece hits the bottom
-        // it doesn't instantly become inactive.
+        // So that when the piece hits the bottom it
+        // doesn't instantly become inactive.
         setTimeout(() => {
           if(this.squareMustStop()){
             this.stopSquare()
@@ -46,6 +49,7 @@ class Board{
   cementActivePieceOnGrid(){
     this.activePiece.currentRotation().forEach((square) => {
       const position = square.pos();
+      // square.fixedPosition = position;
       this.grid[position[1]][position[0]] = square
     })
   }
@@ -88,23 +92,73 @@ class Board{
     this.activePiece = piece
   }
 
+  checkForRowClear(){
+    this.grid.forEach((row, idx) => {
+      this.rowClearable(row) ? this.clearRowIdx(idx) : null
+    })
+  }
+
+  rowClearable(row){
+    return row.every((piece) => {
+      return piece !== nullSquareInstance
+    })
+  }
+
+  clearRowIdx(idx){
+    this.clearRowRect(idx)
+    this.grid.splice(idx, 1)
+    const row = []
+    for(let i = 0; i < 10; i++ ){
+      row.push(nullSquareInstance)
+    }
+    this.grid.unshift(row)
+    this.drawNewRowsAbove(idx)
+  }
+
+  drawNewRowsAbove(idx){
+    for(let i = 0; i < idx + 1; i ++){
+      this.grid.forEach((row, j) => {
+        row.forEach((square, q) => {
+          if(square !== nullSquareInstance){
+            // square.draw([q, j])
+            // this.ctx.fillStyle = square.color
+            // this.ctx.fillRect((q * 40), j * 40,
+            //   40, 40)
+          }
+        })
+      })
+    }
+  }
+
+  clearRowRect(idx){
+    this.ctx.clearRect(0, idx * 40, 400, 40)
+  }
+
   handleKeyClicks(){
     this.handleKeyPress = window.addEventListener("keydown", (e) => {
       switch(e.keyCode){
         case 37:
-          this.activePiece ? this.activePiece.handleLeftKeyPress() : null
+          this.activePiece ?
+          this.activePiece.handleLeftKeyPress()
+          : null
           break
 
         case 38:
-          this.activePiece ? this.activePiece.handleUpKeyPress() : null
+          this.activePiece ?
+          this.activePiece.handleUpKeyPress()
+          : null
           break
 
         case 39:
-          this.activePiece ? this.activePiece.handleRightKeyPress() : null
+          this.activePiece ?
+          this.activePiece.handleRightKeyPress()
+          : null
           break
 
         case 40:
-          this.activePiece ? this.activePiece.fallDown() : null
+          this.activePiece ?
+          this.activePiece.fallDown()
+          : null
           break
       }
     })

@@ -4,7 +4,6 @@ const _defaults = {
 }
 //Can make these modular with regards to the size of canvas.
 
-
 class Square{
 
   constructor(options){
@@ -14,10 +13,11 @@ class Square{
     this.dimensions = _defaults.dimensions
   }
 
-  draw(color){
-    const drawingCords = this.cordsToPos()
-    this.ctx.fillStyle = color
-    this.ctx.fillRect(drawingCords[0], drawingCords[1],
+  draw(color = this.color, pos = this.pos()){
+    const drawingPos = this.cordsToPos(pos)
+    this.color = color
+    this.ctx.fillStyle = this.color
+    this.ctx.fillRect(drawingPos[0], drawingPos[1],
       this.dimensions[0], this.dimensions[1]);
   }
 
@@ -32,8 +32,8 @@ class Square{
       && this.pos()[1] >= 0 && this.pos()[1] < 20
   }
 
-  cordsToPos(){
-    return [this.pos()[0] * 40, this.pos()[1] * 40]
+  cordsToPos(pos = this.pos()){
+    return [pos[0] * 40, pos[1] * 40]
   }
 
   atBottom(){

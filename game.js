@@ -5,7 +5,7 @@ import shuffle from 'lodash/shuffle'
 class Game{
 
   constructor(options){
-    this.board = new Board({game: this})
+    this.board = new Board({game: this, ctx: options.ctx})
     this.ctx = options.ctx
     this.availablePieces = []
   }

@@ -74,7 +74,6 @@ const _defaults = {
 }
 //Can make these modular with regards to the size of canvas.
 
-
 class Square{
 
   constructor(options){
@@ -84,10 +83,11 @@ class Square{
     this.dimensions = _defaults.dimensions
   }
 
-  draw(color){
-    const drawingCords = this.cordsToPos()
-    this.ctx.fillStyle = color
-    this.ctx.fillRect(drawingCords[0], drawingCords[1],
+  draw(color = this.color, pos = this.pos()){
+    const drawingPos = this.cordsToPos(pos)
+    this.color = color
+    this.ctx.fillStyle = this.color
+    this.ctx.fillRect(drawingPos[0], drawingPos[1],
       this.dimensions[0], this.dimensions[1]);
   }
 
@@ -102,8 +102,8 @@ class Square{
       && this.pos()[1] >= 0 && this.pos()[1] < 20
   }
 
-  cordsToPos(){
-    return [this.pos()[0] * 40, this.pos()[1] * 40]
+  cordsToPos(pos = this.pos()){
+    return [pos[0] * 40, pos[1] * 40]
   }
 
   atBottom(){
@@ -569,10 +569,12 @@ const _defaultPieces = []
 
 
 
+
 class Board{
 
   constructor(options){
     this.game = options.game
+    this.ctx = options.ctx
     this.grid = []
     this.pieces = []
     this.activePiece = null
@@ -582,11 +584,12 @@ class Board{
   animate(){
     this.activePiece.draw()
     return window.setInterval(() => {
+      this.checkForRowClear()
       this.activePiece.clearRect()
       this.activePiece.fallDown()
       if(this.squareMustStop()){
-        // So that when the piece hits the bottom
-        // it doesn't instantly become inactive.
+        // So that when the piece hits the bottom it
+        // doesn't instantly become inactive.
         setTimeout(() => {
           if(this.squareMustStop()){
             this.stopSquare()
@@ -612,6 +615,7 @@ class Board{
   cementActivePieceOnGrid(){
     this.activePiece.currentRotation().forEach((square) => {
       const position = square.pos();
+      // square.fixedPosition = position;
       this.grid[position[1]][position[0]] = square
     })
   }
@@ -654,23 +658,73 @@ class Board{
     this.activePiece = piece
   }
 
+  checkForRowClear(){
+    this.grid.forEach((row, idx) => {
+      this.rowClearable(row) ? this.clearRowIdx(idx) : null
+    })
+  }
+
+  rowClearable(row){
+    return row.every((piece) => {
+      return piece !== __WEBPACK_IMPORTED_MODULE_0__squares_null_square_js__["a" /* default */]
+    })
+  }
+
+  clearRowIdx(idx){
+    this.clearRowRect(idx)
+    this.grid.splice(idx, 1)
+    const row = []
+    for(let i = 0; i < 10; i++ ){
+      row.push(__WEBPACK_IMPORTED_MODULE_0__squares_null_square_js__["a" /* default */])
+    }
+    this.grid.unshift(row)
+    this.drawNewRowsAbove(idx)
+  }
+
+  drawNewRowsAbove(idx){
+    for(let i = 0; i < idx + 1; i ++){
+      this.grid.forEach((row, j) => {
+        row.forEach((square, q) => {
+          if(square !== __WEBPACK_IMPORTED_MODULE_0__squares_null_square_js__["a" /* default */]){
+            // square.draw([q, j])
+            // this.ctx.fillStyle = square.color
+            // this.ctx.fillRect((q * 40), j * 40,
+            //   40, 40)
+          }
+        })
+      })
+    }
+  }
+
+  clearRowRect(idx){
+    this.ctx.clearRect(0, idx * 40, 400, 40)
+  }
+
   handleKeyClicks(){
     this.handleKeyPress = window.addEventListener("keydown", (e) => {
       switch(e.keyCode){
         case 37:
-          this.activePiece ? this.activePiece.handleLeftKeyPress() : null
+          this.activePiece ?
+          this.activePiece.handleLeftKeyPress()
+          : null
           break
 
         case 38:
-          this.activePiece ? this.activePiece.handleUpKeyPress() : null
+          this.activePiece ?
+          this.activePiece.handleUpKeyPress()
+          : null
           break
 
         case 39:
-          this.activePiece ? this.activePiece.handleRightKeyPress() : null
+          this.activePiece ?
+          this.activePiece.handleRightKeyPress()
+          : null
           break
 
         case 40:
-          this.activePiece ? this.activePiece.fallDown() : null
+          this.activePiece ?
+          this.activePiece.fallDown()
+          : null
           break
       }
     })
@@ -899,7 +953,7 @@ window.addEventListener("DOMContentLoaded", () => {
 class Game{
 
   constructor(options){
-    this.board = new __WEBPACK_IMPORTED_MODULE_0__board_js__["a" /* default */]({game: this})
+    this.board = new __WEBPACK_IMPORTED_MODULE_0__board_js__["a" /* default */]({game: this, ctx: options.ctx})
     this.ctx = options.ctx
     this.availablePieces = []
   }
