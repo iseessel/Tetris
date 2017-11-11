@@ -13,9 +13,11 @@ class Square{
     this.dimensions = _defaults.dimensions
   }
 
-  draw(color = this.color, pos = this.pos()){
+  //NB: When a piece is no longer moving on the board, we will use
+  // its static position on the grid, passed in from the board.
+  draw(color, pos = this.pos()){
+    this.color = (color ? color : this.color)
     const drawingPos = this.cordsToPos(pos)
-    this.color = color
     this.ctx.fillStyle = this.color
     this.ctx.fillRect(drawingPos[0], drawingPos[1],
       this.dimensions[0], this.dimensions[1]);

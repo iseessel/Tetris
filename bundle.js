@@ -83,9 +83,11 @@ class Square{
     this.dimensions = _defaults.dimensions
   }
 
-  draw(color = this.color, pos = this.pos()){
+  //NB: When a piece is no longer moving on the board, we will use
+  // its static position on the grid, passed in from the board.
+  draw(color, pos = this.pos()){
+    this.color = (color ? color : this.color)
     const drawingPos = this.cordsToPos(pos)
-    this.color = color
     this.ctx.fillStyle = this.color
     this.ctx.fillRect(drawingPos[0], drawingPos[1],
       this.dimensions[0], this.dimensions[1]);
@@ -584,15 +586,14 @@ class Board{
   animate(){
     this.activePiece.draw()
     return window.setInterval(() => {
-      this.checkForRowClear()
       this.activePiece.clearRect()
       this.activePiece.fallDown()
       if(this.squareMustStop()){
-        // So that when the piece hits the bottom it
-        // doesn't instantly become inactive.
         setTimeout(() => {
           if(this.squareMustStop()){
             this.stopSquare()
+            this.checkForRowClear()
+            this.game.introducePiece()
             this.activePiece.draw()
           }
         }, 300)
@@ -609,13 +610,11 @@ class Board{
   stopSquare(){
     this.cementActivePieceOnGrid()
     this.activePiece = null
-    this.game.introducePiece()
   }
 
   cementActivePieceOnGrid(){
     this.activePiece.currentRotation().forEach((square) => {
       const position = square.pos();
-      // square.fixedPosition = position;
       this.grid[position[1]][position[0]] = square
     })
   }
@@ -659,9 +658,13 @@ class Board{
   }
 
   checkForRowClear(){
+    const rowsToBeCleared = []
     this.grid.forEach((row, idx) => {
-      this.rowClearable(row) ? this.clearRowIdx(idx) : null
+      this.rowClearable(row) ? rowsToBeCleared.push(idx) : null
     })
+    if(rowsToBeCleared.length !== 0){
+      this.clearRows(rowsToBeCleared)
+    }
   }
 
   rowClearable(row){
@@ -670,34 +673,37 @@ class Board{
     })
   }
 
-  clearRowIdx(idx){
-    this.clearRowRect(idx)
+  clearRows(indeces){
+    this.clearCanvas()
+    indeces.forEach((idx) => {
+      this.clearRow(idx)
+    })
+    this.reDrawGrid()
+  }
+
+  clearRow(idx){
     this.grid.splice(idx, 1)
     const row = []
     for(let i = 0; i < 10; i++ ){
       row.push(__WEBPACK_IMPORTED_MODULE_0__squares_null_square_js__["a" /* default */])
     }
     this.grid.unshift(row)
-    this.drawNewRowsAbove(idx)
   }
 
-  drawNewRowsAbove(idx){
-    for(let i = 0; i < idx + 1; i ++){
-      this.grid.forEach((row, j) => {
-        row.forEach((square, q) => {
-          if(square !== __WEBPACK_IMPORTED_MODULE_0__squares_null_square_js__["a" /* default */]){
-            // square.draw([q, j])
-            // this.ctx.fillStyle = square.color
-            // this.ctx.fillRect((q * 40), j * 40,
-            //   40, 40)
-          }
-        })
+  reDrawGrid(){
+    this.grid.forEach((row, i) => {
+      row.forEach((square, j) => {
+        if(square != __WEBPACK_IMPORTED_MODULE_0__squares_null_square_js__["a" /* default */]){
+          console.log(this.grid);
+          console.log([j,i]);
+          square.draw(null, [j, i])
+        }
       })
-    }
+    })
   }
 
-  clearRowRect(idx){
-    this.ctx.clearRect(0, idx * 40, 400, 40)
+  clearCanvas(idx){
+    this.ctx.clearRect(0, 0, 400, 800)
   }
 
   handleKeyClicks(){
@@ -968,7 +974,7 @@ class Game{
   introducePiece(){
     if(!this.board.activePiece){
       this.availablePieces.length === 0
-        ? this.createPiece()
+        ? this.createPieces()
         : null
       this.board.introducePiece(this.randomPiece())
     }

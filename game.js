@@ -20,7 +20,7 @@ class Game{
   introducePiece(){
     if(!this.board.activePiece){
       this.availablePieces.length === 0
-        ? this.createPiece()
+        ? this.createPieces()
         : null
       this.board.introducePiece(this.randomPiece())
     }
