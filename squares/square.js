@@ -1,6 +1,9 @@
+const _defaultBoardSize = [300, 600]
+
 const _defaults = {
-  dimensions: [40, 40],
-  falling: 40
+  dimensions: [_defaultBoardSize[0] / 10,
+    _defaultBoardSize[1] / 20],
+  falling: _defaultBoardSize[0] / 10
 }
 //Can make these modular with regards to the size of canvas.
 
@@ -35,7 +38,7 @@ class Square{
   }
 
   cordsToPos(pos = this.pos()){
-    return [pos[0] * 40, pos[1] * 40]
+    return [pos[0] * _defaults.falling, pos[1] * _defaults.falling]
   }
 
   atBottom(){

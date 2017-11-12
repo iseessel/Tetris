@@ -6,7 +6,6 @@ import Piece from './piece.js'
 import Board from './board.js'
 import Game from './game.js'
 
-
 window.addEventListener("DOMContentLoaded", () => {
   const canvas = document.getElementById("canvas");
   const ctx = canvas.getContext("2d");

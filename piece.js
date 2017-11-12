@@ -23,7 +23,8 @@ class Piece{
 
   fallDown(){
     this.clearRect()
-    if(!this.atBottom() && !this.board.activePieceCollide("down")){
+    if(!this.atBottom() &&
+    !this.board.activePieceCollide("down")){
       this.anchorSquare.fallDown()
       this.each(() => {
         this.draw()
@@ -62,7 +63,7 @@ class Piece{
   rotate(){
     this.currentRotationIdx = (this.currentRotationIdx + 1) %
       this.rotations.length
-  }
+  } 
 
   unRotate(){
     this.currentRotationIdx = (this.currentRotationIdx

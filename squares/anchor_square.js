@@ -6,6 +6,10 @@ class AnchorSquare extends Square{
     this.position = options.center
   }
 
+  shiftUp(){
+    this.position[1] -= 1
+  }
+
   fallDown(){
     this.position[1] += 1
   }

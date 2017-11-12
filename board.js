@@ -3,35 +3,41 @@ import nullSquareInstance from './squares/null_square.js'
 import Piece from './piece.js'
 import Square from './squares/square.js'
 
+const _defaultBoardSize = [300, 600]
 
 class Board{
 
   constructor(options){
     this.game = options.game
+    this.velocity = options.velocity
     this.ctx = options.ctx
     this.grid = []
-    this.pieces = []
     this.activePiece = null
     this.createNullBoard()
   }
 
   animate(){
     this.activePiece.draw()
-    return window.setInterval(() => {
+    this.animationId = window.setInterval(() => {
       this.activePiece.clearRect()
       this.activePiece.fallDown()
       if(this.squareMustStop()){
         setTimeout(() => {
           if(this.squareMustStop()){
-            this.stopSquare()
-            this.checkForRowClear()
-            this.game.introducePiece()
-            this.activePiece.draw()
+            this.handleStoppedSquare()
           }
-        }, 300)
+        }, 400)
       }
       this.activePiece.draw()
-    }, 500)
+    }, this.velocity)
+  }
+
+  handleStoppedSquare(){
+    this.stopSquare()
+    this.checkForRowClear()
+    this.game.introducePiece()
+    this.game.levelUp()
+    this.activePiece.draw()
   }
 
   squareMustStop(){
@@ -52,18 +58,26 @@ class Board{
   }
 
   activePieceCollide(direction){
-    return this.activePiece.currentRotation().some((square) => {
-      const position = square.pos()
+    const rotation = this.activePiece.currentRotation()
+    for(let i = 0; i < rotation.length; i++){
+      const position = rotation[i].pos()
       let posX = position[1]
       let posY = position[0]
+      if(posX < 0){
+        continue
+      }
       switch(direction){
         case("down"):
           posX += 1
           break;
       }
-      return !(this.grid[posX][posY] ==
-        nullSquareInstance)
-    })
+      if (!(this.grid[posX][posY] ==
+        nullSquareInstance)){
+          return true
+        }
+    }
+
+  return false
   }
 
   activePieceAtBottom(){
@@ -84,10 +98,36 @@ class Board{
     }
   }
 
-  introducePiece(piece){
-    this.pieces.push(piece)
-    this.activePiece = piece
+  gameLost(){
+    return this.activePieceCollide()
   }
+
+
+  introducePiece(piece){
+    this.activePiece = piece
+    if(this.gameLost()){
+      this.stopGame()
+    }
+  }
+
+  allPiecesOffScreen(){
+    return this.activePiece.currentRotation().every((square) => {
+      return square.pos()[1] < 0
+    })
+  }
+
+  stopGame(){
+    clearInterval(this.animationId)
+    debugger;
+    while(this.activePieceCollide()){
+      this.activePiece.anchorSquare.shiftUp()
+    }
+    this.activePiece.draw()
+    setTimeout(() => {
+      alert(" You Lost :( ")
+    }, 100)
+  }
+
 
   checkForRowClear(){
     const rowsToBeCleared = []
@@ -106,6 +146,7 @@ class Board{
   }
 
   clearRows(indeces){
+    this.game.linesCleared += indeces.length
     this.clearCanvas()
     indeces.forEach((idx) => {
       this.clearRow(idx)
@@ -126,8 +167,6 @@ class Board{
     this.grid.forEach((row, i) => {
       row.forEach((square, j) => {
         if(square != nullSquareInstance){
-          console.log(this.grid);
-          console.log([j,i]);
           square.draw(null, [j, i])
         }
       })
@@ -135,7 +174,8 @@ class Board{
   }
 
   clearCanvas(idx){
-    this.ctx.clearRect(0, 0, 400, 800)
+    this.ctx.clearRect(0, 0, _defaultBoardSize[0],
+      _defaultBoardSize[1])
   }
 
   handleKeyClicks(){

@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 17);
+/******/ 	return __webpack_require__(__webpack_require__.s = 5);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -68,9 +68,12 @@
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+const _defaultBoardSize = [300, 600]
+
 const _defaults = {
-  dimensions: [40, 40],
-  falling: 40
+  dimensions: [_defaultBoardSize[0] / 10,
+    _defaultBoardSize[1] / 20],
+  falling: _defaultBoardSize[0] / 10
 }
 //Can make these modular with regards to the size of canvas.
 
@@ -105,7 +108,7 @@ class Square{
   }
 
   cordsToPos(pos = this.pos()){
-    return [pos[0] * 40, pos[1] * 40]
+    return [pos[0] * _defaults.falling, pos[1] * _defaults.falling]
   }
 
   atBottom(){
@@ -148,7 +151,8 @@ class Piece{
 
   fallDown(){
     this.clearRect()
-    if(!this.atBottom() && !this.board.activePieceCollide("down")){
+    if(!this.atBottom() &&
+    !this.board.activePieceCollide("down")){
       this.anchorSquare.fallDown()
       this.each(() => {
         this.draw()
@@ -187,7 +191,7 @@ class Piece{
   rotate(){
     this.currentRotationIdx = (this.currentRotationIdx + 1) %
       this.rotations.length
-  }
+  } 
 
   unRotate(){
     this.currentRotationIdx = (this.currentRotationIdx
@@ -279,6 +283,10 @@ class AnchorSquare extends __WEBPACK_IMPORTED_MODULE_0__square_js__["a" /* defau
     this.position = options.center
   }
 
+  shiftUp(){
+    this.position[1] -= 1
+  }
+
   fallDown(){
     this.position[1] += 1
   }
@@ -357,75 +365,35 @@ Object.freeze(nullSquareInstance)
 
 /***/ }),
 /* 5 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-var Symbol = __webpack_require__(11),
-    getRawTag = __webpack_require__(39),
-    objectToString = __webpack_require__(40);
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__pieces_i_piece_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__squares_anchor_square_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__squares_relative_square_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__pieces_t_piece_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__piece_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__board_js__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__game_js__ = __webpack_require__(9);
 
-/** `Object#toString` result references. */
-var nullTag = '[object Null]',
-    undefinedTag = '[object Undefined]';
 
-/** Built-in value references. */
-var symToStringTag = Symbol ? Symbol.toStringTag : undefined;
 
-/**
- * The base implementation of `getTag` without fallbacks for buggy environments.
- *
- * @private
- * @param {*} value The value to query.
- * @returns {string} Returns the `toStringTag`.
- */
-function baseGetTag(value) {
-  if (value == null) {
-    return value === undefined ? undefinedTag : nullTag;
-  }
-  return (symToStringTag && symToStringTag in Object(value))
-    ? getRawTag(value)
-    : objectToString(value);
-}
 
-module.exports = baseGetTag;
+
+
+
+
+window.addEventListener("DOMContentLoaded", () => {
+  const canvas = document.getElementById("canvas");
+  const ctx = canvas.getContext("2d");
+  const game = new __WEBPACK_IMPORTED_MODULE_6__game_js__["a" /* default */]({ctx});
+  game.play()
+})
 
 
 /***/ }),
 /* 6 */
-/***/ (function(module, exports) {
-
-/**
- * Checks if `value` is object-like. A value is object-like if it's not `null`
- * and has a `typeof` result of "object".
- *
- * @static
- * @memberOf _
- * @since 4.0.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
- * @example
- *
- * _.isObjectLike({});
- * // => true
- *
- * _.isObjectLike([1, 2, 3]);
- * // => true
- *
- * _.isObjectLike(_.noop);
- * // => false
- *
- * _.isObjectLike(null);
- * // => false
- */
-function isObjectLike(value) {
-  return value != null && typeof value == 'object';
-}
-
-module.exports = isObjectLike;
-
-
-/***/ }),
-/* 7 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -488,7 +456,7 @@ function createIPiece(ctx){
 
 
 /***/ }),
-/* 8 */
+/* 7 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -559,7 +527,7 @@ function createTPiece(ctx){
 
 
 /***/ }),
-/* 9 */
+/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -571,35 +539,41 @@ const _defaultPieces = []
 
 
 
+const _defaultBoardSize = [300, 600]
 
 class Board{
 
   constructor(options){
     this.game = options.game
+    this.velocity = options.velocity
     this.ctx = options.ctx
     this.grid = []
-    this.pieces = []
     this.activePiece = null
     this.createNullBoard()
   }
 
   animate(){
     this.activePiece.draw()
-    return window.setInterval(() => {
+    this.animationId = window.setInterval(() => {
       this.activePiece.clearRect()
       this.activePiece.fallDown()
       if(this.squareMustStop()){
         setTimeout(() => {
           if(this.squareMustStop()){
-            this.stopSquare()
-            this.checkForRowClear()
-            this.game.introducePiece()
-            this.activePiece.draw()
+            this.handleStoppedSquare()
           }
-        }, 300)
+        }, 400)
       }
       this.activePiece.draw()
-    }, 500)
+    }, this.velocity)
+  }
+
+  handleStoppedSquare(){
+    this.stopSquare()
+    this.checkForRowClear()
+    this.game.introducePiece()
+    this.game.levelUp()
+    this.activePiece.draw()
   }
 
   squareMustStop(){
@@ -620,18 +594,26 @@ class Board{
   }
 
   activePieceCollide(direction){
-    return this.activePiece.currentRotation().some((square) => {
-      const position = square.pos()
+    const rotation = this.activePiece.currentRotation()
+    for(let i = 0; i < rotation.length; i++){
+      const position = rotation[i].pos()
       let posX = position[1]
       let posY = position[0]
+      if(posX < 0){
+        continue
+      }
       switch(direction){
         case("down"):
           posX += 1
           break;
       }
-      return !(this.grid[posX][posY] ==
-        __WEBPACK_IMPORTED_MODULE_0__squares_null_square_js__["a" /* default */])
-    })
+      if (!(this.grid[posX][posY] ==
+        __WEBPACK_IMPORTED_MODULE_0__squares_null_square_js__["a" /* default */])){
+          return true
+        }
+    }
+
+  return false
   }
 
   activePieceAtBottom(){
@@ -652,10 +634,36 @@ class Board{
     }
   }
 
-  introducePiece(piece){
-    this.pieces.push(piece)
-    this.activePiece = piece
+  gameLost(){
+    return this.activePieceCollide()
   }
+
+
+  introducePiece(piece){
+    this.activePiece = piece
+    if(this.gameLost()){
+      this.stopGame()
+    }
+  }
+
+  allPiecesOffScreen(){
+    return this.activePiece.currentRotation().every((square) => {
+      return square.pos()[1] < 0
+    })
+  }
+
+  stopGame(){
+    clearInterval(this.animationId)
+    debugger;
+    while(this.activePieceCollide()){
+      this.activePiece.anchorSquare.shiftUp()
+    }
+    this.activePiece.draw()
+    setTimeout(() => {
+      alert(" You Lost :( ")
+    }, 100)
+  }
+
 
   checkForRowClear(){
     const rowsToBeCleared = []
@@ -674,6 +682,7 @@ class Board{
   }
 
   clearRows(indeces){
+    this.game.linesCleared += indeces.length
     this.clearCanvas()
     indeces.forEach((idx) => {
       this.clearRow(idx)
@@ -694,8 +703,6 @@ class Board{
     this.grid.forEach((row, i) => {
       row.forEach((square, j) => {
         if(square != __WEBPACK_IMPORTED_MODULE_0__squares_null_square_js__["a" /* default */]){
-          console.log(this.grid);
-          console.log([j,i]);
           square.draw(null, [j, i])
         }
       })
@@ -703,7 +710,8 @@ class Board{
   }
 
   clearCanvas(idx){
-    this.ctx.clearRect(0, 0, 400, 800)
+    this.ctx.clearRect(0, 0, _defaultBoardSize[0],
+      _defaultBoardSize[1])
   }
 
   handleKeyClicks(){
@@ -741,7 +749,151 @@ class Board{
 
 
 /***/ }),
+/* 9 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__board_js__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__pieces_create_pieces_js__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash_shuffle__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash_shuffle___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_lodash_shuffle__);
+
+
+
+
+const _levelVelocities = [
+  750, 650, 550, 500, 450, 400, 350, 325, 300,
+  250, 225, 200, 175, 150, 140, 130, 120, 110
+]
+
+class Game{
+
+  constructor(options){
+    this.board = new __WEBPACK_IMPORTED_MODULE_0__board_js__["a" /* default */]({
+      game: this,
+      ctx: options.ctx, velocity: _levelVelocities[0]
+    })
+    this.level = 0
+    this.linesCleared = 0
+    this.ctx = options.ctx
+    this.availablePieces = []
+  }
+
+  levelUp(){
+    if(this.linesCleared % 10 === 0 & this.linesCleared != 0){
+      this.level += 1
+      this.board.velocity = _levelVelocities[this.level]
+      clearInterval(this.board.animationId)
+      this.board.animate()
+    }
+  }
+
+  play(){
+    this.createPieces()
+    this.board.handleKeyClicks()
+    this.introducePiece();
+    this.board.animate()
+  }
+
+  introducePiece(){
+    this.availablePieces.length === 0
+        ? this.createPieces()
+        : null
+    this.board.introducePiece(this.randomPiece())
+  }
+
+  randomPiece(){
+    const randomPiece = this.availablePieces[0]
+    this.availablePieces.splice(0, 1)
+    return randomPiece
+  }
+
+  createPieces(){
+    for(let i = 0; i < 4; i++){
+      __WEBPACK_IMPORTED_MODULE_1__pieces_create_pieces_js__["a" /* default */].forEach((pieceConstructor) => {
+        const piece = pieceConstructor(this.ctx)
+        piece.board = this.board
+        this.availablePieces.push(piece)
+      })
+    }
+    this.availablePieces = __WEBPACK_IMPORTED_MODULE_2_lodash_shuffle___default()(this.availablePieces)
+  }
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (Game);
+
+
+/***/ }),
 /* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Symbol = __webpack_require__(13),
+    getRawTag = __webpack_require__(39),
+    objectToString = __webpack_require__(40);
+
+/** `Object#toString` result references. */
+var nullTag = '[object Null]',
+    undefinedTag = '[object Undefined]';
+
+/** Built-in value references. */
+var symToStringTag = Symbol ? Symbol.toStringTag : undefined;
+
+/**
+ * The base implementation of `getTag` without fallbacks for buggy environments.
+ *
+ * @private
+ * @param {*} value The value to query.
+ * @returns {string} Returns the `toStringTag`.
+ */
+function baseGetTag(value) {
+  if (value == null) {
+    return value === undefined ? undefinedTag : nullTag;
+  }
+  return (symToStringTag && symToStringTag in Object(value))
+    ? getRawTag(value)
+    : objectToString(value);
+}
+
+module.exports = baseGetTag;
+
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports) {
+
+/**
+ * Checks if `value` is object-like. A value is object-like if it's not `null`
+ * and has a `typeof` result of "object".
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
+ * @example
+ *
+ * _.isObjectLike({});
+ * // => true
+ *
+ * _.isObjectLike([1, 2, 3]);
+ * // => true
+ *
+ * _.isObjectLike(_.noop);
+ * // => false
+ *
+ * _.isObjectLike(null);
+ * // => false
+ */
+function isObjectLike(value) {
+  return value != null && typeof value == 'object';
+}
+
+module.exports = isObjectLike;
+
+
+/***/ }),
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseRandom = __webpack_require__(28);
@@ -775,10 +927,10 @@ module.exports = shuffleSelf;
 
 
 /***/ }),
-/* 11 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var root = __webpack_require__(12);
+var root = __webpack_require__(14);
 
 /** Built-in value references. */
 var Symbol = root.Symbol;
@@ -787,10 +939,10 @@ module.exports = Symbol;
 
 
 /***/ }),
-/* 12 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var freeGlobal = __webpack_require__(13);
+var freeGlobal = __webpack_require__(15);
 
 /** Detect free variable `self`. */
 var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
@@ -802,7 +954,7 @@ module.exports = root;
 
 
 /***/ }),
-/* 13 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/** Detect free variable `global` from Node.js. */
@@ -813,7 +965,7 @@ module.exports = freeGlobal;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(38)))
 
 /***/ }),
-/* 14 */
+/* 16 */
 /***/ (function(module, exports) {
 
 /**
@@ -845,7 +997,7 @@ module.exports = isArray;
 
 
 /***/ }),
-/* 15 */
+/* 17 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -873,7 +1025,7 @@ module.exports = function(module) {
 
 
 /***/ }),
-/* 16 */
+/* 18 */
 /***/ (function(module, exports) {
 
 /** Used as references for various `Number` constants. */
@@ -914,104 +1066,16 @@ module.exports = isLength;
 
 
 /***/ }),
-/* 17 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__pieces_i_piece_js__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__squares_anchor_square_js__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__squares_relative_square_js__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__pieces_t_piece_js__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__piece_js__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__board_js__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__game_js__ = __webpack_require__(18);
-
-
-
-
-
-
-
-
-
-window.addEventListener("DOMContentLoaded", () => {
-  const canvas = document.getElementById("canvas");
-  const ctx = canvas.getContext("2d");
-  const game = new __WEBPACK_IMPORTED_MODULE_6__game_js__["a" /* default */]({ctx});
-  game.play()
-})
-
-
-/***/ }),
-/* 18 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__board_js__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__pieces_create_pieces_js__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash_shuffle__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash_shuffle___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_lodash_shuffle__);
-
-
-
-
-class Game{
-
-  constructor(options){
-    this.board = new __WEBPACK_IMPORTED_MODULE_0__board_js__["a" /* default */]({game: this, ctx: options.ctx})
-    this.ctx = options.ctx
-    this.availablePieces = []
-  }
-
-  play(){
-    this.createPieces()
-    this.board.handleKeyClicks()
-    this.introducePiece();
-    this.board.animate()
-  }
-
-  introducePiece(){
-    if(!this.board.activePiece){
-      this.availablePieces.length === 0
-        ? this.createPieces()
-        : null
-      this.board.introducePiece(this.randomPiece())
-    }
-  }
-
-  randomPiece(){
-    const randomEl = this.availablePieces[0]
-    this.availablePieces.splice(0, 1)
-    return randomEl
-  }
-
-  createPieces(){
-    for(let i = 0; i < 4; i++){
-      __WEBPACK_IMPORTED_MODULE_1__pieces_create_pieces_js__["a" /* default */].forEach((pieceConstructor) => {
-        const piece = pieceConstructor(this.ctx)
-        piece.board = this.board
-        this.availablePieces.push(piece)
-      })
-    }
-    this.availablePieces = __WEBPACK_IMPORTED_MODULE_2_lodash_shuffle___default()(this.availablePieces)
-  }
-}
-
-/* harmony default export */ __webpack_exports__["a"] = (Game);
-
-
-/***/ }),
 /* 19 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__i_piece_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__i_piece_js__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__l_piece_js__ = __webpack_require__(20);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__reverse_l_piece_js__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__reverse_z_piece_js__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__square_piece_js__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__t_piece_js__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__t_piece_js__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__z_piece_js__ = __webpack_require__(24);
 
 
@@ -1355,7 +1419,7 @@ function createZPiece(ctx){
 
 var arrayShuffle = __webpack_require__(26),
     baseShuffle = __webpack_require__(29),
-    isArray = __webpack_require__(14);
+    isArray = __webpack_require__(16);
 
 /**
  * Creates an array of shuffled values, using a version of the
@@ -1385,7 +1449,7 @@ module.exports = shuffle;
 /***/ (function(module, exports, __webpack_require__) {
 
 var copyArray = __webpack_require__(27),
-    shuffleSelf = __webpack_require__(10);
+    shuffleSelf = __webpack_require__(12);
 
 /**
  * A specialized version of `_.shuffle` for arrays.
@@ -1455,7 +1519,7 @@ module.exports = baseRandom;
 /* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var shuffleSelf = __webpack_require__(10),
+var shuffleSelf = __webpack_require__(12),
     values = __webpack_require__(30);
 
 /**
@@ -1613,7 +1677,7 @@ module.exports = keys;
 
 var baseTimes = __webpack_require__(35),
     isArguments = __webpack_require__(36),
-    isArray = __webpack_require__(14),
+    isArray = __webpack_require__(16),
     isBuffer = __webpack_require__(41),
     isIndex = __webpack_require__(43),
     isTypedArray = __webpack_require__(44);
@@ -1693,7 +1757,7 @@ module.exports = baseTimes;
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseIsArguments = __webpack_require__(37),
-    isObjectLike = __webpack_require__(6);
+    isObjectLike = __webpack_require__(11);
 
 /** Used for built-in method references. */
 var objectProto = Object.prototype;
@@ -1734,8 +1798,8 @@ module.exports = isArguments;
 /* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(5),
-    isObjectLike = __webpack_require__(6);
+var baseGetTag = __webpack_require__(10),
+    isObjectLike = __webpack_require__(11);
 
 /** `Object#toString` result references. */
 var argsTag = '[object Arguments]';
@@ -1785,7 +1849,7 @@ module.exports = g;
 /* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Symbol = __webpack_require__(11);
+var Symbol = __webpack_require__(13);
 
 /** Used for built-in method references. */
 var objectProto = Object.prototype;
@@ -1865,7 +1929,7 @@ module.exports = objectToString;
 /* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(module) {var root = __webpack_require__(12),
+/* WEBPACK VAR INJECTION */(function(module) {var root = __webpack_require__(14),
     stubFalse = __webpack_require__(42);
 
 /** Detect free variable `exports`. */
@@ -1904,7 +1968,7 @@ var isBuffer = nativeIsBuffer || stubFalse;
 
 module.exports = isBuffer;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(15)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(17)(module)))
 
 /***/ }),
 /* 42 */
@@ -1995,9 +2059,9 @@ module.exports = isTypedArray;
 /* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(5),
-    isLength = __webpack_require__(16),
-    isObjectLike = __webpack_require__(6);
+var baseGetTag = __webpack_require__(10),
+    isLength = __webpack_require__(18),
+    isObjectLike = __webpack_require__(11);
 
 /** `Object#toString` result references. */
 var argsTag = '[object Arguments]',
@@ -2081,7 +2145,7 @@ module.exports = baseUnary;
 /* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(module) {var freeGlobal = __webpack_require__(13);
+/* WEBPACK VAR INJECTION */(function(module) {var freeGlobal = __webpack_require__(15);
 
 /** Detect free variable `exports`. */
 var freeExports = typeof exports == 'object' && exports && !exports.nodeType && exports;
@@ -2104,7 +2168,7 @@ var nodeUtil = (function() {
 
 module.exports = nodeUtil;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(15)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(17)(module)))
 
 /***/ }),
 /* 48 */
@@ -2204,7 +2268,7 @@ module.exports = overArg;
 /***/ (function(module, exports, __webpack_require__) {
 
 var isFunction = __webpack_require__(53),
-    isLength = __webpack_require__(16);
+    isLength = __webpack_require__(18);
 
 /**
  * Checks if `value` is array-like. A value is considered array-like if it's
@@ -2242,7 +2306,7 @@ module.exports = isArrayLike;
 /* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(5),
+var baseGetTag = __webpack_require__(10),
     isObject = __webpack_require__(54);
 
 /** `Object#toString` result references. */
