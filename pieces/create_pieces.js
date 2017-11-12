@@ -7,5 +7,6 @@ import createTPiece from './t_piece.js'
 import createZPiece from './z_piece.js'
 
 
+// export default [createIPiece]
 export default [createIPiece, createLPiece, createReverseLPiece,
   createReverseZPiece, createSquarePiece, createTPiece, createZPiece]

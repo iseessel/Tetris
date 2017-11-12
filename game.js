@@ -12,11 +12,11 @@ class Game{
   constructor(options){
     this.board = new Board({
       game: this,
-      ctx: options.ctx, velocity: _levelVelocities[0]
+      gameCtx: options.gameCtx, velocity: _levelVelocities[0]
     })
     this.level = 0
     this.linesCleared = 0
-    this.ctx = options.ctx
+    this.gameCtx = options.gameCtx
     this.availablePieces = []
   }
 
@@ -52,7 +52,7 @@ class Game{
   createPieces(){
     for(let i = 0; i < 4; i++){
       createPieces.forEach((pieceConstructor) => {
-        const piece = pieceConstructor(this.ctx)
+        const piece = pieceConstructor(this.gameCtx)
         piece.board = this.board
         this.availablePieces.push(piece)
       })

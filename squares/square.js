@@ -11,7 +11,8 @@ class Square{
 
   constructor(options){
     this.color = options.color
-    this.ctx = options.ctx
+    this.gameCtx = options.gameCtx
+    debugger;
     this.vel = options.vel //Velocity is squares per ms i.e. 20px per ms.
     this.dimensions = _defaults.dimensions
   }
@@ -21,14 +22,14 @@ class Square{
   draw(color, pos = this.pos()){
     this.color = (color ? color : this.color)
     const drawingPos = this.cordsToPos(pos)
-    this.ctx.fillStyle = this.color
-    this.ctx.fillRect(drawingPos[0], drawingPos[1],
-      this.dimensions[0], this.dimensions[1]);
+    this.gameCtx.fillStyle = this.color
+    this.gameCtx.fillRect(drawingPos[0] + 1, drawingPos[1] + 1,
+      this.dimensions[0] - 4, this.dimensions[1] - 4);
   }
 
   clearRect(){
     const drawingCords = this.cordsToPos()
-    this.ctx.clearRect(drawingCords[0], drawingCords[1],
+    this.gameCtx.clearRect(drawingCords[0], drawingCords[1],
       this.dimensions[0], this.dimensions[1])
   }
 

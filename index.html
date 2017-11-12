@@ -3,13 +3,43 @@
   <head>
     <meta charset="utf-8">
     <title></title>
-    <link rel="stylesheet" href="./application.css">
+    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P"
+      rel="stylesheet">
+    <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
     <script src="./bundle.js"></script>
+    <link rel="stylesheet" href="./application.css">
+
   </head>
   <body>
     <div class="game">
-      <canvas width="300" height="600" id="canvas">
-      </canvas>
+        <div class="game-console">
+          <div class="rows">
+            <div class="left-row">
+              <canvas width="300" height="600" id="game-canvas">
+              </canvas>
+              <canvas id="background-canvas" width="300" height="600">
+              </canvas>
+            </div>
+
+            <div class="right-row">
+              <canvas id="score-level-canvas" width="180" height="284"></canvas>
+            </div>
+          </div>
+          <div class="my-information">
+            <p>Created By Isaac Seessel</p>
+            <div class="portfolio-links">
+              <a href="https://github.com/iseessel">
+                <i class="fa fa-github" aria-hidden="true"></i>Git
+              </a>
+              <a href="https://wwww.isaacseessel.com">
+                <i class="fa fa-info-circle" aria-hidden="true"></i>Site
+              </a>
+            </div>
+            <br>
+          </div>
+        </div>
+
     </div>
   </body>
+
 </html>

@@ -1,9 +1,89 @@
-canvas{
-  border: 5px solid black;
+html{
+  background: linear-gradient(#242834, black);
+  height: 100%;
 }
 
+.game-console{
+  height: 690px;
+  width: 500px;
+  border: 1px solid #242834;
+  box-sizing: content-box;
+  border-radius: 5px 5px 50px 50px;
+  box-shadow: 15px 15px rgba(36, 40, 52, 0.7);
+  background-color: #421a88;
+}
+
+.rows{
+  display: flex;
+}
 .game{
   display: flex;
   justify-content: center;
   margin-top: 50px;
+}
+
+.left-row{
+  margin-top: 40px;
+  margin-left: 20px;
+}
+
+.right-row{
+  box-sizing: border-box;
+  margin-top: 40px;
+}
+
+.my-information{
+  width: 475px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'Press Start 2P', cursive;
+  margin-left: 22px;
+  font-size: 12px;
+  padding-top: 10px;
+  color: #d0c8c8;
+}
+
+.my-information p{
+  -webkit-margin-before: 0;
+  -webkit-margin-after: 0;
+  margin-top: 5px;
+}
+
+.my-information a {
+  color: #d0c8c8;
+  font-size: 10px;
+  text-decoration: none;
+  font-family: 'Press Start 2P', cursive;
+}
+
+.fa{
+  font-size: 20px;
+  padding-top: 3px;
+  padding-right: 6px;
+}
+
+canvas{
+  /*height: 100%;*/
+}
+
+#game-canvas{
+  display: block;
+  position: absolute;
+  border: 1px solid #242834;
+  background-color: #1e222e;
+}
+
+#background-canvas{
+  z-index: 1;
+  position: relative;
+}
+
+#score-level-canvas{
+  border: 1px solid red;
+}
+
+.portfolio-links{
+  margin-right: 5px;
+  margin-top: 2px;
 }

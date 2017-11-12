@@ -4,44 +4,44 @@ import AnchorSquare from '../squares/anchor_square.js'
 import RelativeSquare from '../squares/relative_square.js'
 import nullSquareInstance from '../squares/null_square.js'
 
-function createTPiece(ctx){
+function createTPiece(gameCtx){
 
-  const anchorSquare = new AnchorSquare({ctx: ctx, center: [4, 1]})
-  const relativeSquareOneUp = new RelativeSquare({ctx: ctx,
+  const anchorSquare = new AnchorSquare({gameCtx: gameCtx, center: [4, 1]})
+  const relativeSquareOneUp = new RelativeSquare({gameCtx: gameCtx,
     offset: [-1, 0], anchorSquare: anchorSquare})
-  const relativeSquareTwoUp = new RelativeSquare({ctx: ctx,
+  const relativeSquareTwoUp = new RelativeSquare({gameCtx: gameCtx,
     offset: [1, 0], anchorSquare: anchorSquare})
-  const relativeSquareThreeUp = new RelativeSquare({ctx: ctx,
+  const relativeSquareThreeUp = new RelativeSquare({gameCtx: gameCtx,
     offset: [0, -1], anchorSquare: anchorSquare})
 
   const rotationOne = [anchorSquare, relativeSquareOneUp,
     relativeSquareTwoUp, relativeSquareThreeUp]
 
-  const relativeSquareOneDown = new RelativeSquare({ctx: ctx,
+  const relativeSquareOneDown = new RelativeSquare({gameCtx: gameCtx,
     offset: [0, -1], anchorSquare: anchorSquare})
-  const relativeSquareTwoDown = new RelativeSquare({ctx: ctx,
+  const relativeSquareTwoDown = new RelativeSquare({gameCtx: gameCtx,
     offset: [0, 1], anchorSquare: anchorSquare})
-  const relativeSquareThreeDown = new RelativeSquare({ctx: ctx,
+  const relativeSquareThreeDown = new RelativeSquare({gameCtx: gameCtx,
     offset: [1, 0], anchorSquare: anchorSquare})
 
   const rotationTwo = [anchorSquare, relativeSquareOneDown,
     relativeSquareTwoDown, relativeSquareThreeDown]
 
-  const relativeSquareOneRight = new RelativeSquare({ctx: ctx,
+  const relativeSquareOneRight = new RelativeSquare({gameCtx: gameCtx,
     offset: [-1, 0], anchorSquare: anchorSquare})
-  const relativeSquareTwoRight = new RelativeSquare({ctx: ctx,
+  const relativeSquareTwoRight = new RelativeSquare({gameCtx: gameCtx,
     offset: [1, 0], anchorSquare: anchorSquare})
-  const relativeSquareThreeRight = new RelativeSquare({ctx: ctx,
+  const relativeSquareThreeRight = new RelativeSquare({gameCtx: gameCtx,
     offset: [0, 1], anchorSquare: anchorSquare})
 
   const rotationThree = [anchorSquare, relativeSquareOneRight,
     relativeSquareTwoRight, relativeSquareThreeRight]
 
-  const relativeSquareOneLeft= new RelativeSquare({ctx: ctx,
+  const relativeSquareOneLeft= new RelativeSquare({gameCtx: gameCtx,
     offset: [0, -1], anchorSquare: anchorSquare})
-  const relativeSquareTwoLeft= new RelativeSquare({ctx: ctx,
+  const relativeSquareTwoLeft= new RelativeSquare({gameCtx: gameCtx,
     offset: [0, 1], anchorSquare: anchorSquare})
-  const relativeSquareThreeLeft= new RelativeSquare({ctx: ctx,
+  const relativeSquareThreeLeft= new RelativeSquare({gameCtx: gameCtx,
     offset: [-1, 0], anchorSquare: anchorSquare})
 
   const rotationFour = [anchorSquare, relativeSquareOneLeft,

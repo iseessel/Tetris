@@ -6,9 +6,28 @@ import Piece from './piece.js'
 import Board from './board.js'
 import Game from './game.js'
 
+
+const createGrid = (gameCtx) => {
+  for(let i = 0; i < 600; i += 30){
+    gameCtx.fillStyle = "rgba(255, 255, 255, 0.1)"
+    gameCtx.fillRect(0, i, 300, 1);
+  }
+  for(let i = 0; i < 300; i+= 30){
+    gameCtx.fillStyle = "rgba(255, 255, 255, 0.1)"
+    gameCtx.fillRect(i, 0, 1, 600);
+  }
+}
+
 window.addEventListener("DOMContentLoaded", () => {
-  const canvas = document.getElementById("canvas");
-  const ctx = canvas.getContext("2d");
-  const game = new Game({ctx});
+  const gameCanvas = document.getElementById("game-canvas");
+  const backgroundCanvas = document.getElementById("background-canvas");
+  const scoreCanvas = document.getElementById("score-level-canvas");
+
+  const backgroundgameCtx= backgroundCanvas.getContext("2d");
+  const scoregameCtx = scoreCanvas.getContext("2d")
+  const gameCtx = gameCanvas.getContext("2d");
+
+  createGrid(backgroundgameCtx)
+  const game = new Game({gameCtx});
   game.play()
 })

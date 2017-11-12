@@ -10,7 +10,7 @@ class Board{
   constructor(options){
     this.game = options.game
     this.velocity = options.velocity
-    this.ctx = options.ctx
+    this.gameCtx = options.gameCtx
     this.grid = []
     this.activePiece = null
     this.createNullBoard()
@@ -21,15 +21,18 @@ class Board{
     this.animationId = window.setInterval(() => {
       this.activePiece.clearRect()
       this.activePiece.fallDown()
+      this.activePiece.draw()
+    }, this.velocity)
+
+    this.checkStops = window.setInterval(() => {
       if(this.squareMustStop()){
         setTimeout(() => {
           if(this.squareMustStop()){
             this.handleStoppedSquare()
           }
-        }, 400)
+        }, 500)
       }
-      this.activePiece.draw()
-    }, this.velocity)
+    }, 50)
   }
 
   handleStoppedSquare(){
@@ -174,7 +177,7 @@ class Board{
   }
 
   clearCanvas(idx){
-    this.ctx.clearRect(0, 0, _defaultBoardSize[0],
+    this.gameCtx.clearRect(0, 0, _defaultBoardSize[0],
       _defaultBoardSize[1])
   }
 

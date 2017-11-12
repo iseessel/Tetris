@@ -4,14 +4,14 @@ import AnchorSquare from '../squares/anchor_square.js'
 import RelativeSquare from '../squares/relative_square.js'
 import nullSquareInstance from '../squares/null_square.js'
 
-function createSquarePiece(ctx){
+function createSquarePiece(gameCtx){
 
-  const anchorSquare = new AnchorSquare({ctx: ctx, center: [4, 1]})
-  const relativeSquareOne = new RelativeSquare({ctx: ctx,
+  const anchorSquare = new AnchorSquare({gameCtx: gameCtx, center: [4, 1]})
+  const relativeSquareOne = new RelativeSquare({gameCtx: gameCtx,
     offset: [-1, 0], anchorSquare: anchorSquare})
-  const relativeSquareTwo = new RelativeSquare({ctx: ctx,
+  const relativeSquareTwo = new RelativeSquare({gameCtx: gameCtx,
     offset: [0, -1], anchorSquare: anchorSquare})
-  const relativeSquareThree = new RelativeSquare({ctx: ctx,
+  const relativeSquareThree = new RelativeSquare({gameCtx: gameCtx,
     offset: [-1, -1], anchorSquare: anchorSquare})
 
   const rotationOne = [anchorSquare, relativeSquareOne, relativeSquareTwo, relativeSquareThree]

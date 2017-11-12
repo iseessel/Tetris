@@ -4,6 +4,7 @@ class Piece{
 
   constructor(options){
     this.anchorSquare = options.anchorSquare
+    this.src = options.src
     this.rotations = options.rotations
     this.currentRotationIdx = options.currentRotationIdx
     this.color = options.color
@@ -63,7 +64,7 @@ class Piece{
   rotate(){
     this.currentRotationIdx = (this.currentRotationIdx + 1) %
       this.rotations.length
-  } 
+  }
 
   unRotate(){
     this.currentRotationIdx = (this.currentRotationIdx

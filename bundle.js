@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 5);
+/******/ 	return __webpack_require__(__webpack_require__.s = 17);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -81,7 +81,8 @@ class Square{
 
   constructor(options){
     this.color = options.color
-    this.ctx = options.ctx
+    this.gameCtx = options.gameCtx
+    debugger;
     this.vel = options.vel //Velocity is squares per ms i.e. 20px per ms.
     this.dimensions = _defaults.dimensions
   }
@@ -91,14 +92,14 @@ class Square{
   draw(color, pos = this.pos()){
     this.color = (color ? color : this.color)
     const drawingPos = this.cordsToPos(pos)
-    this.ctx.fillStyle = this.color
-    this.ctx.fillRect(drawingPos[0], drawingPos[1],
-      this.dimensions[0], this.dimensions[1]);
+    this.gameCtx.fillStyle = this.color
+    this.gameCtx.fillRect(drawingPos[0] + 1, drawingPos[1] + 1,
+      this.dimensions[0] - 4, this.dimensions[1] - 4);
   }
 
   clearRect(){
     const drawingCords = this.cordsToPos()
-    this.ctx.clearRect(drawingCords[0], drawingCords[1],
+    this.gameCtx.clearRect(drawingCords[0], drawingCords[1],
       this.dimensions[0], this.dimensions[1])
   }
 
@@ -132,6 +133,7 @@ class Piece{
 
   constructor(options){
     this.anchorSquare = options.anchorSquare
+    this.src = options.src
     this.rotations = options.rotations
     this.currentRotationIdx = options.currentRotationIdx
     this.color = options.color
@@ -191,7 +193,7 @@ class Piece{
   rotate(){
     this.currentRotationIdx = (this.currentRotationIdx + 1) %
       this.rotations.length
-  } 
+  }
 
   unRotate(){
     this.currentRotationIdx = (this.currentRotationIdx
@@ -365,94 +367,71 @@ Object.freeze(nullSquareInstance)
 
 /***/ }),
 /* 5 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__pieces_i_piece_js__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__squares_anchor_square_js__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__squares_relative_square_js__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__pieces_t_piece_js__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__piece_js__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__board_js__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__game_js__ = __webpack_require__(9);
+var Symbol = __webpack_require__(11),
+    getRawTag = __webpack_require__(39),
+    objectToString = __webpack_require__(40);
 
+/** `Object#toString` result references. */
+var nullTag = '[object Null]',
+    undefinedTag = '[object Undefined]';
 
+/** Built-in value references. */
+var symToStringTag = Symbol ? Symbol.toStringTag : undefined;
 
+/**
+ * The base implementation of `getTag` without fallbacks for buggy environments.
+ *
+ * @private
+ * @param {*} value The value to query.
+ * @returns {string} Returns the `toStringTag`.
+ */
+function baseGetTag(value) {
+  if (value == null) {
+    return value === undefined ? undefinedTag : nullTag;
+  }
+  return (symToStringTag && symToStringTag in Object(value))
+    ? getRawTag(value)
+    : objectToString(value);
+}
 
-
-
-
-
-window.addEventListener("DOMContentLoaded", () => {
-  const canvas = document.getElementById("canvas");
-  const ctx = canvas.getContext("2d");
-  const game = new __WEBPACK_IMPORTED_MODULE_6__game_js__["a" /* default */]({ctx});
-  game.play()
-})
+module.exports = baseGetTag;
 
 
 /***/ }),
 /* 6 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__squares_square_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__piece_js__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__squares_anchor_square_js__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__squares_null_square_js__ = __webpack_require__(4);
-
-
-
-
-
-
-function createIPiece(ctx){
-
-  const anchorSquare = new __WEBPACK_IMPORTED_MODULE_2__squares_anchor_square_js__["a" /* default */]({ctx: ctx, center: [4, 2]})
-
-  const relativeSquareUpOne = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [0, 1], anchorSquare: anchorSquare})
-  const relativeSquareUpTwo = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [0, -1], anchorSquare: anchorSquare})
-  const relativeSquareUpThree = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [0, -2], anchorSquare: anchorSquare})
-
-  const rotationOne = [anchorSquare, relativeSquareUpOne, relativeSquareUpTwo, relativeSquareUpThree]
-
-  const relativeSquareRightOne = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [-1, 0], anchorSquare: anchorSquare})
-  const relativeSquareRightTwo = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [1, 0], anchorSquare: anchorSquare})
-  const relativeSquareRightThree = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [2, -0], anchorSquare: anchorSquare})
-
-  const rotationTwo = [anchorSquare, relativeSquareRightOne,
-      relativeSquareRightTwo, relativeSquareRightThree]
-
-  const relativeSquareDownOne = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [1, 0], anchorSquare: anchorSquare})
-  const relativeSquareDownTwo = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [1, 1], anchorSquare: anchorSquare})
-  const relativeSquareDownThree = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [1, -2], anchorSquare: anchorSquare})
-  const relativeSquareDownFour = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
-    offset: [1, -1], anchorSquare: anchorSquare})
-
-    const rotationThree = [relativeSquareDownOne, relativeSquareDownTwo,
-       relativeSquareDownThree, relativeSquareDownFour]
-
-
-  const rotations = [rotationOne, rotationTwo, rotationThree, rotationTwo]
-
-  const piece = new __WEBPACK_IMPORTED_MODULE_1__piece_js__["a" /* default */]({rotations: rotations, currentRotationIdx: 0,
-      vel: 500, anchorSquare: anchorSquare, color: "#2FFFFF"})
-
-  return piece
+/**
+ * Checks if `value` is object-like. A value is object-like if it's not `null`
+ * and has a `typeof` result of "object".
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
+ * @example
+ *
+ * _.isObjectLike({});
+ * // => true
+ *
+ * _.isObjectLike([1, 2, 3]);
+ * // => true
+ *
+ * _.isObjectLike(_.noop);
+ * // => false
+ *
+ * _.isObjectLike(null);
+ * // => false
+ */
+function isObjectLike(value) {
+  return value != null && typeof value == 'object';
 }
 
-/* harmony default export */ __webpack_exports__["a"] = (createIPiece);
+module.exports = isObjectLike;
 
 
 /***/ }),
@@ -471,44 +450,107 @@ function createIPiece(ctx){
 
 
 
-function createTPiece(ctx){
+function createIPiece(gameCtx){
 
-  const anchorSquare = new __WEBPACK_IMPORTED_MODULE_2__squares_anchor_square_js__["a" /* default */]({ctx: ctx, center: [4, 1]})
-  const relativeSquareOneUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const anchorSquare = new __WEBPACK_IMPORTED_MODULE_2__squares_anchor_square_js__["a" /* default */]({gameCtx: gameCtx, center: [4, 2]})
+
+  const relativeSquareUpOne = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
+    offset: [0, 1], anchorSquare: anchorSquare})
+  const relativeSquareUpTwo = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
+    offset: [0, -1], anchorSquare: anchorSquare})
+  const relativeSquareUpThree = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
+    offset: [0, -2], anchorSquare: anchorSquare})
+
+  const rotationOne = [anchorSquare, relativeSquareUpOne, relativeSquareUpTwo, relativeSquareUpThree]
+
+  const relativeSquareRightOne = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [-1, 0], anchorSquare: anchorSquare})
-  const relativeSquareTwoUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const relativeSquareRightTwo = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [1, 0], anchorSquare: anchorSquare})
-  const relativeSquareThreeUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const relativeSquareRightThree = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
+    offset: [2, -0], anchorSquare: anchorSquare})
+
+  const rotationTwo = [anchorSquare, relativeSquareRightOne,
+      relativeSquareRightTwo, relativeSquareRightThree]
+
+  const relativeSquareDownOne = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
+    offset: [1, 0], anchorSquare: anchorSquare})
+  const relativeSquareDownTwo = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
+    offset: [1, 1], anchorSquare: anchorSquare})
+  const relativeSquareDownThree = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
+    offset: [1, -2], anchorSquare: anchorSquare})
+  const relativeSquareDownFour = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
+    offset: [1, -1], anchorSquare: anchorSquare})
+
+    const rotationThree = [relativeSquareDownOne, relativeSquareDownTwo,
+       relativeSquareDownThree, relativeSquareDownFour]
+
+
+  const rotations = [rotationOne, rotationTwo, rotationThree, rotationTwo]
+
+  const piece = new __WEBPACK_IMPORTED_MODULE_1__piece_js__["a" /* default */]({rotations: rotations, currentRotationIdx: 0,
+      vel: 500, anchorSquare: anchorSquare, color: "#2FFFFF"})
+
+  return piece
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (createIPiece);
+
+
+/***/ }),
+/* 8 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__squares_square_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__piece_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__squares_anchor_square_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__squares_null_square_js__ = __webpack_require__(4);
+
+
+
+
+
+
+function createTPiece(gameCtx){
+
+  const anchorSquare = new __WEBPACK_IMPORTED_MODULE_2__squares_anchor_square_js__["a" /* default */]({gameCtx: gameCtx, center: [4, 1]})
+  const relativeSquareOneUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
+    offset: [-1, 0], anchorSquare: anchorSquare})
+  const relativeSquareTwoUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
+    offset: [1, 0], anchorSquare: anchorSquare})
+  const relativeSquareThreeUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [0, -1], anchorSquare: anchorSquare})
 
   const rotationOne = [anchorSquare, relativeSquareOneUp,
     relativeSquareTwoUp, relativeSquareThreeUp]
 
-  const relativeSquareOneDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const relativeSquareOneDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [0, -1], anchorSquare: anchorSquare})
-  const relativeSquareTwoDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const relativeSquareTwoDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [0, 1], anchorSquare: anchorSquare})
-  const relativeSquareThreeDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const relativeSquareThreeDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [1, 0], anchorSquare: anchorSquare})
 
   const rotationTwo = [anchorSquare, relativeSquareOneDown,
     relativeSquareTwoDown, relativeSquareThreeDown]
 
-  const relativeSquareOneRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const relativeSquareOneRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [-1, 0], anchorSquare: anchorSquare})
-  const relativeSquareTwoRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const relativeSquareTwoRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [1, 0], anchorSquare: anchorSquare})
-  const relativeSquareThreeRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const relativeSquareThreeRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [0, 1], anchorSquare: anchorSquare})
 
   const rotationThree = [anchorSquare, relativeSquareOneRight,
     relativeSquareTwoRight, relativeSquareThreeRight]
 
-  const relativeSquareOneLeft= new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const relativeSquareOneLeft= new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [0, -1], anchorSquare: anchorSquare})
-  const relativeSquareTwoLeft= new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const relativeSquareTwoLeft= new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [0, 1], anchorSquare: anchorSquare})
-  const relativeSquareThreeLeft= new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const relativeSquareThreeLeft= new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [-1, 0], anchorSquare: anchorSquare})
 
   const rotationFour = [anchorSquare, relativeSquareOneLeft,
@@ -527,7 +569,7 @@ function createTPiece(ctx){
 
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -546,7 +588,7 @@ class Board{
   constructor(options){
     this.game = options.game
     this.velocity = options.velocity
-    this.ctx = options.ctx
+    this.gameCtx = options.gameCtx
     this.grid = []
     this.activePiece = null
     this.createNullBoard()
@@ -557,15 +599,18 @@ class Board{
     this.animationId = window.setInterval(() => {
       this.activePiece.clearRect()
       this.activePiece.fallDown()
+      this.activePiece.draw()
+    }, this.velocity)
+
+    this.checkStops = window.setInterval(() => {
       if(this.squareMustStop()){
         setTimeout(() => {
           if(this.squareMustStop()){
             this.handleStoppedSquare()
           }
-        }, 400)
+        }, 500)
       }
-      this.activePiece.draw()
-    }, this.velocity)
+    }, 50)
   }
 
   handleStoppedSquare(){
@@ -710,7 +755,7 @@ class Board{
   }
 
   clearCanvas(idx){
-    this.ctx.clearRect(0, 0, _defaultBoardSize[0],
+    this.gameCtx.clearRect(0, 0, _defaultBoardSize[0],
       _defaultBoardSize[1])
   }
 
@@ -749,151 +794,7 @@ class Board{
 
 
 /***/ }),
-/* 9 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__board_js__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__pieces_create_pieces_js__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash_shuffle__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash_shuffle___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_lodash_shuffle__);
-
-
-
-
-const _levelVelocities = [
-  750, 650, 550, 500, 450, 400, 350, 325, 300,
-  250, 225, 200, 175, 150, 140, 130, 120, 110
-]
-
-class Game{
-
-  constructor(options){
-    this.board = new __WEBPACK_IMPORTED_MODULE_0__board_js__["a" /* default */]({
-      game: this,
-      ctx: options.ctx, velocity: _levelVelocities[0]
-    })
-    this.level = 0
-    this.linesCleared = 0
-    this.ctx = options.ctx
-    this.availablePieces = []
-  }
-
-  levelUp(){
-    if(this.linesCleared % 10 === 0 & this.linesCleared != 0){
-      this.level += 1
-      this.board.velocity = _levelVelocities[this.level]
-      clearInterval(this.board.animationId)
-      this.board.animate()
-    }
-  }
-
-  play(){
-    this.createPieces()
-    this.board.handleKeyClicks()
-    this.introducePiece();
-    this.board.animate()
-  }
-
-  introducePiece(){
-    this.availablePieces.length === 0
-        ? this.createPieces()
-        : null
-    this.board.introducePiece(this.randomPiece())
-  }
-
-  randomPiece(){
-    const randomPiece = this.availablePieces[0]
-    this.availablePieces.splice(0, 1)
-    return randomPiece
-  }
-
-  createPieces(){
-    for(let i = 0; i < 4; i++){
-      __WEBPACK_IMPORTED_MODULE_1__pieces_create_pieces_js__["a" /* default */].forEach((pieceConstructor) => {
-        const piece = pieceConstructor(this.ctx)
-        piece.board = this.board
-        this.availablePieces.push(piece)
-      })
-    }
-    this.availablePieces = __WEBPACK_IMPORTED_MODULE_2_lodash_shuffle___default()(this.availablePieces)
-  }
-}
-
-/* harmony default export */ __webpack_exports__["a"] = (Game);
-
-
-/***/ }),
 /* 10 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var Symbol = __webpack_require__(13),
-    getRawTag = __webpack_require__(39),
-    objectToString = __webpack_require__(40);
-
-/** `Object#toString` result references. */
-var nullTag = '[object Null]',
-    undefinedTag = '[object Undefined]';
-
-/** Built-in value references. */
-var symToStringTag = Symbol ? Symbol.toStringTag : undefined;
-
-/**
- * The base implementation of `getTag` without fallbacks for buggy environments.
- *
- * @private
- * @param {*} value The value to query.
- * @returns {string} Returns the `toStringTag`.
- */
-function baseGetTag(value) {
-  if (value == null) {
-    return value === undefined ? undefinedTag : nullTag;
-  }
-  return (symToStringTag && symToStringTag in Object(value))
-    ? getRawTag(value)
-    : objectToString(value);
-}
-
-module.exports = baseGetTag;
-
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports) {
-
-/**
- * Checks if `value` is object-like. A value is object-like if it's not `null`
- * and has a `typeof` result of "object".
- *
- * @static
- * @memberOf _
- * @since 4.0.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
- * @example
- *
- * _.isObjectLike({});
- * // => true
- *
- * _.isObjectLike([1, 2, 3]);
- * // => true
- *
- * _.isObjectLike(_.noop);
- * // => false
- *
- * _.isObjectLike(null);
- * // => false
- */
-function isObjectLike(value) {
-  return value != null && typeof value == 'object';
-}
-
-module.exports = isObjectLike;
-
-
-/***/ }),
-/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseRandom = __webpack_require__(28);
@@ -927,10 +828,10 @@ module.exports = shuffleSelf;
 
 
 /***/ }),
-/* 13 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var root = __webpack_require__(14);
+var root = __webpack_require__(12);
 
 /** Built-in value references. */
 var Symbol = root.Symbol;
@@ -939,10 +840,10 @@ module.exports = Symbol;
 
 
 /***/ }),
-/* 14 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var freeGlobal = __webpack_require__(15);
+var freeGlobal = __webpack_require__(13);
 
 /** Detect free variable `self`. */
 var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
@@ -954,7 +855,7 @@ module.exports = root;
 
 
 /***/ }),
-/* 15 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/** Detect free variable `global` from Node.js. */
@@ -965,7 +866,7 @@ module.exports = freeGlobal;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(38)))
 
 /***/ }),
-/* 16 */
+/* 14 */
 /***/ (function(module, exports) {
 
 /**
@@ -997,7 +898,7 @@ module.exports = isArray;
 
 
 /***/ }),
-/* 17 */
+/* 15 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -1025,7 +926,7 @@ module.exports = function(module) {
 
 
 /***/ }),
-/* 18 */
+/* 16 */
 /***/ (function(module, exports) {
 
 /** Used as references for various `Number` constants. */
@@ -1066,16 +967,139 @@ module.exports = isLength;
 
 
 /***/ }),
+/* 17 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__pieces_i_piece_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__squares_anchor_square_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__squares_relative_square_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__pieces_t_piece_js__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__piece_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__board_js__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__game_js__ = __webpack_require__(18);
+
+
+
+
+
+
+
+
+
+const createGrid = (gameCtx) => {
+  for(let i = 0; i < 600; i += 30){
+    gameCtx.fillStyle = "rgba(255, 255, 255, 0.1)"
+    gameCtx.fillRect(0, i, 300, 1);
+  }
+  for(let i = 0; i < 300; i+= 30){
+    gameCtx.fillStyle = "rgba(255, 255, 255, 0.1)"
+    gameCtx.fillRect(i, 0, 1, 600);
+  }
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+  const gameCanvas = document.getElementById("game-canvas");
+  const backgroundCanvas = document.getElementById("background-canvas");
+  const scoreCanvas = document.getElementById("score-level-canvas");
+
+  const backgroundgameCtx= backgroundCanvas.getContext("2d");
+  const scoregameCtx = scoreCanvas.getContext("2d")
+  const gameCtx = gameCanvas.getContext("2d");
+
+  createGrid(backgroundgameCtx)
+  const game = new __WEBPACK_IMPORTED_MODULE_6__game_js__["a" /* default */]({gameCtx});
+  game.play()
+})
+
+
+/***/ }),
+/* 18 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__board_js__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__pieces_create_pieces_js__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash_shuffle__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash_shuffle___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_lodash_shuffle__);
+
+
+
+
+const _levelVelocities = [
+  750, 650, 550, 500, 450, 400, 350, 325, 300,
+  250, 225, 200, 175, 150, 140, 130, 120, 110
+]
+
+class Game{
+
+  constructor(options){
+    this.board = new __WEBPACK_IMPORTED_MODULE_0__board_js__["a" /* default */]({
+      game: this,
+      gameCtx: options.gameCtx, velocity: _levelVelocities[0]
+    })
+    this.level = 0
+    this.linesCleared = 0
+    this.gameCtx = options.gameCtx
+    this.availablePieces = []
+  }
+
+  levelUp(){
+    if(this.linesCleared % 10 === 0 & this.linesCleared != 0){
+      this.level += 1
+      this.board.velocity = _levelVelocities[this.level]
+      clearInterval(this.board.animationId)
+      this.board.animate()
+    }
+  }
+
+  play(){
+    this.createPieces()
+    this.board.handleKeyClicks()
+    this.introducePiece();
+    this.board.animate()
+  }
+
+  introducePiece(){
+    this.availablePieces.length === 0
+        ? this.createPieces()
+        : null
+    this.board.introducePiece(this.randomPiece())
+  }
+
+  randomPiece(){
+    const randomPiece = this.availablePieces[0]
+    this.availablePieces.splice(0, 1)
+    return randomPiece
+  }
+
+  createPieces(){
+    for(let i = 0; i < 4; i++){
+      __WEBPACK_IMPORTED_MODULE_1__pieces_create_pieces_js__["a" /* default */].forEach((pieceConstructor) => {
+        const piece = pieceConstructor(this.gameCtx)
+        piece.board = this.board
+        this.availablePieces.push(piece)
+      })
+    }
+    this.availablePieces = __WEBPACK_IMPORTED_MODULE_2_lodash_shuffle___default()(this.availablePieces)
+  }
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (Game);
+
+
+/***/ }),
 /* 19 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__i_piece_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__i_piece_js__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__l_piece_js__ = __webpack_require__(20);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__reverse_l_piece_js__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__reverse_z_piece_js__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__square_piece_js__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__t_piece_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__t_piece_js__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__z_piece_js__ = __webpack_require__(24);
 
 
@@ -1086,6 +1110,7 @@ module.exports = isLength;
 
 
 
+// export default [createIPiece]
 /* harmony default export */ __webpack_exports__["a"] = ([__WEBPACK_IMPORTED_MODULE_0__i_piece_js__["a" /* default */], __WEBPACK_IMPORTED_MODULE_1__l_piece_js__["a" /* default */], __WEBPACK_IMPORTED_MODULE_2__reverse_l_piece_js__["a" /* default */],
   __WEBPACK_IMPORTED_MODULE_3__reverse_z_piece_js__["a" /* default */], __WEBPACK_IMPORTED_MODULE_4__square_piece_js__["a" /* default */], __WEBPACK_IMPORTED_MODULE_5__t_piece_js__["a" /* default */], __WEBPACK_IMPORTED_MODULE_6__z_piece_js__["a" /* default */]]);
 
@@ -1106,44 +1131,44 @@ module.exports = isLength;
 
 
 
-function createLPiece(ctx){
+function createLPiece(gameCtx){
 
-  const anchorSquare = new __WEBPACK_IMPORTED_MODULE_2__squares_anchor_square_js__["a" /* default */]({ctx: ctx, center: [4, 1]})
-  const relativeSquareOneUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const anchorSquare = new __WEBPACK_IMPORTED_MODULE_2__squares_anchor_square_js__["a" /* default */]({gameCtx: gameCtx, center: [4, 1]})
+  const relativeSquareOneUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [-1, 0], anchorSquare: anchorSquare})
-  const relativeSquareTwoUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const relativeSquareTwoUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [1, 0], anchorSquare: anchorSquare})
-  const relativeSquareThreeUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const relativeSquareThreeUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [-1, -1], anchorSquare: anchorSquare})
 
   const rotationOne = [anchorSquare, relativeSquareOneUp,
     relativeSquareTwoUp, relativeSquareThreeUp]
 
-  const relativeSquareOneDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const relativeSquareOneDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [0, -1], anchorSquare: anchorSquare})
-  const relativeSquareTwoDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const relativeSquareTwoDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [0, 1], anchorSquare: anchorSquare})
-  const relativeSquareThreeDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const relativeSquareThreeDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [1, -1], anchorSquare: anchorSquare})
 
   const rotationTwo = [anchorSquare, relativeSquareOneDown, relativeSquareTwoDown,
     relativeSquareThreeDown]
 
-  const relativeSquareOneLeft = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const relativeSquareOneLeft = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [1, 0], anchorSquare: anchorSquare})
-  const relativeSquareTwoLeft = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const relativeSquareTwoLeft = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [-1, 0], anchorSquare: anchorSquare})
-  const relativeSquareThreeLeft = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const relativeSquareThreeLeft = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [1, 1], anchorSquare: anchorSquare})
 
   const rotationThree = [anchorSquare, relativeSquareOneLeft, relativeSquareTwoLeft,
     relativeSquareThreeLeft]
 
-  const relativeSquareOneRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const relativeSquareOneRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [0, -1], anchorSquare: anchorSquare})
-  const relativeSquareTwoRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const relativeSquareTwoRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [0, 1], anchorSquare: anchorSquare})
-  const relativeSquareThreeRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const relativeSquareThreeRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [-1, 1], anchorSquare: anchorSquare})
 
   const rotationFour= [anchorSquare, relativeSquareOneRight, relativeSquareTwoRight,
@@ -1177,44 +1202,44 @@ function createLPiece(ctx){
 
 
 
-function createReverseLPiece(ctx){
+function createReverseLPiece(gameCtx){
 
-  const anchorSquare = new __WEBPACK_IMPORTED_MODULE_2__squares_anchor_square_js__["a" /* default */]({ctx: ctx, center: [4, 1]})
-  const relativeSquareOneUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const anchorSquare = new __WEBPACK_IMPORTED_MODULE_2__squares_anchor_square_js__["a" /* default */]({gameCtx: gameCtx, center: [4, 1]})
+  const relativeSquareOneUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [-1, 0], anchorSquare: anchorSquare})
-  const relativeSquareTwoUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const relativeSquareTwoUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [1, 0], anchorSquare: anchorSquare})
-  const relativeSquareThreeUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const relativeSquareThreeUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [1, -1], anchorSquare: anchorSquare})
 
   const rotationOne = [anchorSquare, relativeSquareOneUp,
     relativeSquareTwoUp, relativeSquareThreeUp]
 
-  const relativeSquareOneDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const relativeSquareOneDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [0, -1], anchorSquare: anchorSquare})
-  const relativeSquareTwoDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const relativeSquareTwoDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [0, 1], anchorSquare: anchorSquare})
-  const relativeSquareThreeDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const relativeSquareThreeDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [1, 1], anchorSquare: anchorSquare})
 
   const rotationTwo = [anchorSquare, relativeSquareOneDown, relativeSquareTwoDown,
     relativeSquareThreeDown]
 
-  const relativeSquareOneLeft = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const relativeSquareOneLeft = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [1, 0], anchorSquare: anchorSquare})
-  const relativeSquareTwoLeft = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const relativeSquareTwoLeft = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [-1, 0], anchorSquare: anchorSquare})
-  const relativeSquareThreeLeft = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const relativeSquareThreeLeft = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [-1, 1], anchorSquare: anchorSquare})
 
   const rotationThree = [anchorSquare, relativeSquareOneLeft, relativeSquareTwoLeft,
     relativeSquareThreeLeft]
 
-  const relativeSquareOneRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const relativeSquareOneRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [0, -1], anchorSquare: anchorSquare})
-  const relativeSquareTwoRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const relativeSquareTwoRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [0, 1], anchorSquare: anchorSquare})
-  const relativeSquareThreeRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const relativeSquareThreeRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [-1, -1], anchorSquare: anchorSquare})
 
   const rotationFour= [anchorSquare, relativeSquareOneRight, relativeSquareTwoRight,
@@ -1248,44 +1273,44 @@ function createReverseLPiece(ctx){
 
 
 
-function createReverseZPiece(ctx){
+function createReverseZPiece(gameCtx){
 
-  const anchorSquare = new __WEBPACK_IMPORTED_MODULE_2__squares_anchor_square_js__["a" /* default */]({ctx: ctx, center: [4, 1]})
-  const relativeSquareOneUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const anchorSquare = new __WEBPACK_IMPORTED_MODULE_2__squares_anchor_square_js__["a" /* default */]({gameCtx: gameCtx, center: [4, 1]})
+  const relativeSquareOneUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [0, -1], anchorSquare: anchorSquare})
-  const relativeSquareTwoUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const relativeSquareTwoUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [1, 0], anchorSquare: anchorSquare})
-  const relativeSquareThreeUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const relativeSquareThreeUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [-1, -1], anchorSquare: anchorSquare})
 
   const rotationOne = [anchorSquare, relativeSquareOneUp,
     relativeSquareTwoUp, relativeSquareThreeUp]
 
-  const relativeSquareOneDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const relativeSquareOneDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [0, 1], anchorSquare: anchorSquare})
-  const relativeSquareTwoDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const relativeSquareTwoDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [1, 0], anchorSquare: anchorSquare})
-  const relativeSquareThreeDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const relativeSquareThreeDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [1, -1], anchorSquare: anchorSquare})
 
   const rotationTwo = [anchorSquare, relativeSquareOneDown,
     relativeSquareTwoDown, relativeSquareThreeDown]
 
-  const relativeSquareOneRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const relativeSquareOneRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [-1, 0], anchorSquare: anchorSquare})
-  const relativeSquareTwoRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const relativeSquareTwoRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [0, 1], anchorSquare: anchorSquare})
-  const relativeSquareThreeRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const relativeSquareThreeRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [1, 1], anchorSquare: anchorSquare})
 
   const rotationThree = [anchorSquare, relativeSquareOneRight,
     relativeSquareTwoRight, relativeSquareThreeRight]
 
-  const relativeSquareOneLeft= new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const relativeSquareOneLeft= new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [-1, 0], anchorSquare: anchorSquare})
-  const relativeSquareTwoLeft= new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const relativeSquareTwoLeft= new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [0, -1], anchorSquare: anchorSquare})
-  const relativeSquareThreeLeft= new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const relativeSquareThreeLeft= new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [-1, 1], anchorSquare: anchorSquare})
 
   const rotationFour = [anchorSquare, relativeSquareOneLeft,
@@ -1319,14 +1344,14 @@ function createReverseZPiece(ctx){
 
 
 
-function createSquarePiece(ctx){
+function createSquarePiece(gameCtx){
 
-  const anchorSquare = new __WEBPACK_IMPORTED_MODULE_2__squares_anchor_square_js__["a" /* default */]({ctx: ctx, center: [4, 1]})
-  const relativeSquareOne = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const anchorSquare = new __WEBPACK_IMPORTED_MODULE_2__squares_anchor_square_js__["a" /* default */]({gameCtx: gameCtx, center: [4, 1]})
+  const relativeSquareOne = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [-1, 0], anchorSquare: anchorSquare})
-  const relativeSquareTwo = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const relativeSquareTwo = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [0, -1], anchorSquare: anchorSquare})
-  const relativeSquareThree = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const relativeSquareThree = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [-1, -1], anchorSquare: anchorSquare})
 
   const rotationOne = [anchorSquare, relativeSquareOne, relativeSquareTwo, relativeSquareThree]
@@ -1358,44 +1383,44 @@ function createSquarePiece(ctx){
 
 
 
-function createZPiece(ctx){
+function createZPiece(gameCtx){
 
-  const anchorSquare = new __WEBPACK_IMPORTED_MODULE_2__squares_anchor_square_js__["a" /* default */]({ctx: ctx, center: [4, 1]})
-  const relativeSquareOneUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const anchorSquare = new __WEBPACK_IMPORTED_MODULE_2__squares_anchor_square_js__["a" /* default */]({gameCtx: gameCtx, center: [4, 1]})
+  const relativeSquareOneUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [-1, 0], anchorSquare: anchorSquare})
-  const relativeSquareTwoUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const relativeSquareTwoUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [0, -1], anchorSquare: anchorSquare})
-  const relativeSquareThreeUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const relativeSquareThreeUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [1, -1], anchorSquare: anchorSquare})
 
   const rotationOne = [anchorSquare, relativeSquareOneUp,
     relativeSquareTwoUp, relativeSquareThreeUp]
 
-  const relativeSquareOneDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const relativeSquareOneDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [1, 0], anchorSquare: anchorSquare})
-  const relativeSquareTwoDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const relativeSquareTwoDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [0, -1], anchorSquare: anchorSquare})
-  const relativeSquareThreeDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const relativeSquareThreeDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [1, 1], anchorSquare: anchorSquare})
 
   const rotationTwo = [anchorSquare, relativeSquareOneDown,
     relativeSquareTwoDown, relativeSquareThreeDown]
 
-  const relativeSquareOneRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const relativeSquareOneRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [1, 0], anchorSquare: anchorSquare})
-  const relativeSquareTwoRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const relativeSquareTwoRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [0, 1], anchorSquare: anchorSquare})
-  const relativeSquareThreeRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const relativeSquareThreeRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [-1, 1], anchorSquare: anchorSquare})
 
   const rotationThree = [anchorSquare, relativeSquareOneRight,
     relativeSquareTwoRight, relativeSquareThreeRight]
 
-  const relativeSquareOneLeft= new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const relativeSquareOneLeft= new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [-1, 0], anchorSquare: anchorSquare})
-  const relativeSquareTwoLeft= new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const relativeSquareTwoLeft= new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [-1, -1], anchorSquare: anchorSquare})
-  const relativeSquareThreeLeft= new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({ctx: ctx,
+  const relativeSquareThreeLeft= new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
     offset: [0, 1], anchorSquare: anchorSquare})
 
   const rotationFour = [anchorSquare, relativeSquareOneLeft,
@@ -1419,7 +1444,7 @@ function createZPiece(ctx){
 
 var arrayShuffle = __webpack_require__(26),
     baseShuffle = __webpack_require__(29),
-    isArray = __webpack_require__(16);
+    isArray = __webpack_require__(14);
 
 /**
  * Creates an array of shuffled values, using a version of the
@@ -1449,7 +1474,7 @@ module.exports = shuffle;
 /***/ (function(module, exports, __webpack_require__) {
 
 var copyArray = __webpack_require__(27),
-    shuffleSelf = __webpack_require__(12);
+    shuffleSelf = __webpack_require__(10);
 
 /**
  * A specialized version of `_.shuffle` for arrays.
@@ -1519,7 +1544,7 @@ module.exports = baseRandom;
 /* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var shuffleSelf = __webpack_require__(12),
+var shuffleSelf = __webpack_require__(10),
     values = __webpack_require__(30);
 
 /**
@@ -1677,7 +1702,7 @@ module.exports = keys;
 
 var baseTimes = __webpack_require__(35),
     isArguments = __webpack_require__(36),
-    isArray = __webpack_require__(16),
+    isArray = __webpack_require__(14),
     isBuffer = __webpack_require__(41),
     isIndex = __webpack_require__(43),
     isTypedArray = __webpack_require__(44);
@@ -1757,7 +1782,7 @@ module.exports = baseTimes;
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseIsArguments = __webpack_require__(37),
-    isObjectLike = __webpack_require__(11);
+    isObjectLike = __webpack_require__(6);
 
 /** Used for built-in method references. */
 var objectProto = Object.prototype;
@@ -1798,8 +1823,8 @@ module.exports = isArguments;
 /* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(10),
-    isObjectLike = __webpack_require__(11);
+var baseGetTag = __webpack_require__(5),
+    isObjectLike = __webpack_require__(6);
 
 /** `Object#toString` result references. */
 var argsTag = '[object Arguments]';
@@ -1849,7 +1874,7 @@ module.exports = g;
 /* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Symbol = __webpack_require__(13);
+var Symbol = __webpack_require__(11);
 
 /** Used for built-in method references. */
 var objectProto = Object.prototype;
@@ -1929,7 +1954,7 @@ module.exports = objectToString;
 /* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(module) {var root = __webpack_require__(14),
+/* WEBPACK VAR INJECTION */(function(module) {var root = __webpack_require__(12),
     stubFalse = __webpack_require__(42);
 
 /** Detect free variable `exports`. */
@@ -1968,7 +1993,7 @@ var isBuffer = nativeIsBuffer || stubFalse;
 
 module.exports = isBuffer;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(17)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(15)(module)))
 
 /***/ }),
 /* 42 */
@@ -2059,9 +2084,9 @@ module.exports = isTypedArray;
 /* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(10),
-    isLength = __webpack_require__(18),
-    isObjectLike = __webpack_require__(11);
+var baseGetTag = __webpack_require__(5),
+    isLength = __webpack_require__(16),
+    isObjectLike = __webpack_require__(6);
 
 /** `Object#toString` result references. */
 var argsTag = '[object Arguments]',
@@ -2145,7 +2170,7 @@ module.exports = baseUnary;
 /* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(module) {var freeGlobal = __webpack_require__(15);
+/* WEBPACK VAR INJECTION */(function(module) {var freeGlobal = __webpack_require__(13);
 
 /** Detect free variable `exports`. */
 var freeExports = typeof exports == 'object' && exports && !exports.nodeType && exports;
@@ -2168,7 +2193,7 @@ var nodeUtil = (function() {
 
 module.exports = nodeUtil;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(17)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(15)(module)))
 
 /***/ }),
 /* 48 */
@@ -2268,7 +2293,7 @@ module.exports = overArg;
 /***/ (function(module, exports, __webpack_require__) {
 
 var isFunction = __webpack_require__(53),
-    isLength = __webpack_require__(18);
+    isLength = __webpack_require__(16);
 
 /**
  * Checks if `value` is array-like. A value is considered array-like if it's
@@ -2306,7 +2331,7 @@ module.exports = isArrayLike;
 /* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseGetTag = __webpack_require__(10),
+var baseGetTag = __webpack_require__(5),
     isObject = __webpack_require__(54);
 
 /** `Object#toString` result references. */
