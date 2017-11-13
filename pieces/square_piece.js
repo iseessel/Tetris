@@ -6,13 +6,10 @@ import nullSquareInstance from '../squares/null_square.js'
 
 function createSquarePiece(gameCtx){
 
-  const anchorSquare = new AnchorSquare({gameCtx: gameCtx, center: [4, 1]})
-  const relativeSquareOne = new RelativeSquare({gameCtx: gameCtx,
-    offset: [-1, 0], anchorSquare: anchorSquare})
-  const relativeSquareTwo = new RelativeSquare({gameCtx: gameCtx,
-    offset: [0, -1], anchorSquare: anchorSquare})
-  const relativeSquareThree = new RelativeSquare({gameCtx: gameCtx,
-    offset: [-1, -1], anchorSquare: anchorSquare})
+  const anchorSquare = new AnchorSquare({center: [4, 1]})
+  const relativeSquareOne = new RelativeSquare({offset: [-1, 0]})
+  const relativeSquareTwo = new RelativeSquare({offset: [0, -1]})
+  const relativeSquareThree = new RelativeSquare({offset: [-1, -1]})
 
   const rotationOne = [anchorSquare, relativeSquareOne, relativeSquareTwo, relativeSquareThree]
 

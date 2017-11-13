@@ -1,6 +1,17 @@
+@import url(https://fonts.googleapis.com/css?family=Press+Start+2P);
+@import url(https://fonts.googleapis.com/css?family=Lobster);
+
 html{
   background: linear-gradient(#242834, black);
   height: 100%;
+}
+
+.game-title{
+  position: absolute;
+  top: 0px;
+  font-size: 50px;
+  font-family: 'Press Start 2P', cursive;
+  color: whitesmoke;
 }
 
 .game-console{
@@ -41,7 +52,7 @@ html{
   margin-left: 22px;
   font-size: 12px;
   padding-top: 10px;
-  color: #d0c8c8;
+  color: whitesmoke;
 }
 
 .my-information p{
@@ -51,7 +62,7 @@ html{
 }
 
 .my-information a {
-  color: #d0c8c8;
+  color: whitesmoke;
   font-size: 10px;
   text-decoration: none;
   font-family: 'Press Start 2P', cursive;
@@ -80,7 +91,6 @@ canvas{
 }
 
 #score-level-canvas{
-  border: 1px solid red;
 }
 
 .portfolio-links{

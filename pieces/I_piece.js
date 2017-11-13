@@ -6,35 +6,25 @@ import nullSquareInstance from '../squares/null_square.js'
 
 function createIPiece(gameCtx){
 
-  const anchorSquare = new AnchorSquare({gameCtx: gameCtx, center: [4, 2]})
+  const anchorSquare = new AnchorSquare({center: [4, 2]})
 
-  const relativeSquareUpOne = new RelativeSquare({gameCtx: gameCtx,
-    offset: [0, 1], anchorSquare: anchorSquare})
-  const relativeSquareUpTwo = new RelativeSquare({gameCtx: gameCtx,
-    offset: [0, -1], anchorSquare: anchorSquare})
-  const relativeSquareUpThree = new RelativeSquare({gameCtx: gameCtx,
-    offset: [0, -2], anchorSquare: anchorSquare})
+  const relativeSquareUpOne = new RelativeSquare({offset: [0, 1]})
+  const relativeSquareUpTwo = new RelativeSquare({offset: [0, -1]})
+  const relativeSquareUpThree = new RelativeSquare({offset: [0, -2]})
 
   const rotationOne = [anchorSquare, relativeSquareUpOne, relativeSquareUpTwo, relativeSquareUpThree]
 
-  const relativeSquareRightOne = new RelativeSquare({gameCtx: gameCtx,
-    offset: [-1, 0], anchorSquare: anchorSquare})
-  const relativeSquareRightTwo = new RelativeSquare({gameCtx: gameCtx,
-    offset: [1, 0], anchorSquare: anchorSquare})
-  const relativeSquareRightThree = new RelativeSquare({gameCtx: gameCtx,
-    offset: [2, -0], anchorSquare: anchorSquare})
+  const relativeSquareRightOne = new RelativeSquare({offset: [-1, 0]})
+  const relativeSquareRightTwo = new RelativeSquare({offset: [1, 0]})
+  const relativeSquareRightThree = new RelativeSquare({offset: [2, -0]})
 
   const rotationTwo = [anchorSquare, relativeSquareRightOne,
       relativeSquareRightTwo, relativeSquareRightThree]
 
-  const relativeSquareDownOne = new RelativeSquare({gameCtx: gameCtx,
-    offset: [1, 0], anchorSquare: anchorSquare})
-  const relativeSquareDownTwo = new RelativeSquare({gameCtx: gameCtx,
-    offset: [1, 1], anchorSquare: anchorSquare})
-  const relativeSquareDownThree = new RelativeSquare({gameCtx: gameCtx,
-    offset: [1, -2], anchorSquare: anchorSquare})
-  const relativeSquareDownFour = new RelativeSquare({gameCtx: gameCtx,
-    offset: [1, -1], anchorSquare: anchorSquare})
+  const relativeSquareDownOne = new RelativeSquare({offset: [1, 0]})
+  const relativeSquareDownTwo = new RelativeSquare({offset: [1, 1]})
+  const relativeSquareDownThree = new RelativeSquare({offset: [1, -2]})
+  const relativeSquareDownFour = new RelativeSquare({offset: [1, -1]})
 
     const rotationThree = [relativeSquareDownOne, relativeSquareDownTwo,
        relativeSquareDownThree, relativeSquareDownFour]

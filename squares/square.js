@@ -12,7 +12,6 @@ class Square{
   constructor(options){
     this.color = options.color
     this.gameCtx = options.gameCtx
-    debugger;
     this.vel = options.vel //Velocity is squares per ms i.e. 20px per ms.
     this.dimensions = _defaults.dimensions
   }

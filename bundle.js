@@ -82,7 +82,6 @@ class Square{
   constructor(options){
     this.color = options.color
     this.gameCtx = options.gameCtx
-    debugger;
     this.vel = options.vel //Velocity is squares per ms i.e. 20px per ms.
     this.dimensions = _defaults.dimensions
   }
@@ -139,6 +138,16 @@ class Piece{
     this.color = options.color
     this.vel = options.vel
   }
+
+  squares(){
+    let squares = []
+    this.rotations.forEach((rotation) => {
+      squares = squares.concat(rotation)
+    })
+
+    return squares
+  }
+
   currentRotation(){
     return this.rotations[this.currentRotationIdx]
   }
@@ -452,35 +461,25 @@ module.exports = isObjectLike;
 
 function createIPiece(gameCtx){
 
-  const anchorSquare = new __WEBPACK_IMPORTED_MODULE_2__squares_anchor_square_js__["a" /* default */]({gameCtx: gameCtx, center: [4, 2]})
+  const anchorSquare = new __WEBPACK_IMPORTED_MODULE_2__squares_anchor_square_js__["a" /* default */]({center: [4, 2]})
 
-  const relativeSquareUpOne = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [0, 1], anchorSquare: anchorSquare})
-  const relativeSquareUpTwo = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [0, -1], anchorSquare: anchorSquare})
-  const relativeSquareUpThree = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [0, -2], anchorSquare: anchorSquare})
+  const relativeSquareUpOne = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [0, 1]})
+  const relativeSquareUpTwo = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [0, -1]})
+  const relativeSquareUpThree = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [0, -2]})
 
   const rotationOne = [anchorSquare, relativeSquareUpOne, relativeSquareUpTwo, relativeSquareUpThree]
 
-  const relativeSquareRightOne = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [-1, 0], anchorSquare: anchorSquare})
-  const relativeSquareRightTwo = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [1, 0], anchorSquare: anchorSquare})
-  const relativeSquareRightThree = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [2, -0], anchorSquare: anchorSquare})
+  const relativeSquareRightOne = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [-1, 0]})
+  const relativeSquareRightTwo = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [1, 0]})
+  const relativeSquareRightThree = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [2, -0]})
 
   const rotationTwo = [anchorSquare, relativeSquareRightOne,
       relativeSquareRightTwo, relativeSquareRightThree]
 
-  const relativeSquareDownOne = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [1, 0], anchorSquare: anchorSquare})
-  const relativeSquareDownTwo = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [1, 1], anchorSquare: anchorSquare})
-  const relativeSquareDownThree = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [1, -2], anchorSquare: anchorSquare})
-  const relativeSquareDownFour = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [1, -1], anchorSquare: anchorSquare})
+  const relativeSquareDownOne = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [1, 0]})
+  const relativeSquareDownTwo = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [1, 1]})
+  const relativeSquareDownThree = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [1, -2]})
+  const relativeSquareDownFour = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [1, -1]})
 
     const rotationThree = [relativeSquareDownOne, relativeSquareDownTwo,
        relativeSquareDownThree, relativeSquareDownFour]
@@ -515,43 +514,31 @@ function createIPiece(gameCtx){
 
 function createTPiece(gameCtx){
 
-  const anchorSquare = new __WEBPACK_IMPORTED_MODULE_2__squares_anchor_square_js__["a" /* default */]({gameCtx: gameCtx, center: [4, 1]})
-  const relativeSquareOneUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [-1, 0], anchorSquare: anchorSquare})
-  const relativeSquareTwoUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [1, 0], anchorSquare: anchorSquare})
-  const relativeSquareThreeUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [0, -1], anchorSquare: anchorSquare})
+  const anchorSquare = new __WEBPACK_IMPORTED_MODULE_2__squares_anchor_square_js__["a" /* default */]({center: [4, 1]})
+  const relativeSquareOneUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [-1, 0]})
+  const relativeSquareTwoUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [1, 0]})
+  const relativeSquareThreeUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [0, -1]})
 
   const rotationOne = [anchorSquare, relativeSquareOneUp,
     relativeSquareTwoUp, relativeSquareThreeUp]
 
-  const relativeSquareOneDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [0, -1], anchorSquare: anchorSquare})
-  const relativeSquareTwoDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [0, 1], anchorSquare: anchorSquare})
-  const relativeSquareThreeDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [1, 0], anchorSquare: anchorSquare})
+  const relativeSquareOneDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [0, -1]})
+  const relativeSquareTwoDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [0, 1]})
+  const relativeSquareThreeDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [1, 0]})
 
   const rotationTwo = [anchorSquare, relativeSquareOneDown,
     relativeSquareTwoDown, relativeSquareThreeDown]
 
-  const relativeSquareOneRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [-1, 0], anchorSquare: anchorSquare})
-  const relativeSquareTwoRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [1, 0], anchorSquare: anchorSquare})
-  const relativeSquareThreeRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [0, 1], anchorSquare: anchorSquare})
+  const relativeSquareOneRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [-1, 0]})
+  const relativeSquareTwoRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [1, 0]})
+  const relativeSquareThreeRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [0, 1]})
 
   const rotationThree = [anchorSquare, relativeSquareOneRight,
     relativeSquareTwoRight, relativeSquareThreeRight]
 
-  const relativeSquareOneLeft= new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [0, -1], anchorSquare: anchorSquare})
-  const relativeSquareTwoLeft= new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [0, 1], anchorSquare: anchorSquare})
-  const relativeSquareThreeLeft= new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [-1, 0], anchorSquare: anchorSquare})
+  const relativeSquareOneLeft= new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [0, -1]})
+  const relativeSquareTwoLeft= new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [0, 1]})
+  const relativeSquareThreeLeft= new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [-1, 0]})
 
   const rotationFour = [anchorSquare, relativeSquareOneLeft,
     relativeSquareTwoLeft, relativeSquareThreeLeft]
@@ -589,12 +576,14 @@ class Board{
     this.game = options.game
     this.velocity = options.velocity
     this.gameCtx = options.gameCtx
+    this.scoreCtx = options.scoreCtx
     this.grid = []
     this.activePiece = null
     this.createNullBoard()
   }
 
   animate(){
+    this.game.updateScore()
     this.activePiece.draw()
     this.animationId = window.setInterval(() => {
       this.activePiece.clearRect()
@@ -615,9 +604,8 @@ class Board{
 
   handleStoppedSquare(){
     this.stopSquare()
-    this.checkForRowClear()
     this.game.introducePiece()
-    this.game.levelUp()
+    this.checkForRowClear()
     this.activePiece.draw()
   }
 
@@ -670,6 +658,7 @@ class Board{
   }
 
   createNullBoard(){
+    this.grid = []
     for(let i = 0; i < 20; i++){
       const row = []
       for(let j = 0; j < 10; j++){
@@ -699,7 +688,6 @@ class Board{
 
   stopGame(){
     clearInterval(this.animationId)
-    debugger;
     while(this.activePieceCollide()){
       this.activePiece.anchorSquare.shiftUp()
     }
@@ -717,6 +705,8 @@ class Board{
     })
     if(rowsToBeCleared.length !== 0){
       this.clearRows(rowsToBeCleared)
+      this.game.levelUp()
+      this.game.updateScore()
     }
   }
 
@@ -760,28 +750,28 @@ class Board{
   }
 
   handleKeyClicks(){
-    this.handleKeyPress = window.addEventListener("keydown", (e) => {
+    return this.handleKeyPress = window.addEventListener("keydown", (e) => {
       switch(e.keyCode){
         case 37:
-          this.activePiece ?
+          this.activePiece && !this.game.paused ?
           this.activePiece.handleLeftKeyPress()
           : null
           break
 
         case 38:
-          this.activePiece ?
+          this.activePiece && !this.game.paused ?
           this.activePiece.handleUpKeyPress()
           : null
           break
 
         case 39:
-          this.activePiece ?
+          this.activePiece && !this.game.paused  ?
           this.activePiece.handleRightKeyPress()
           : null
           break
 
         case 40:
-          this.activePiece ?
+          this.activePiece && !this.game.paused  ?
           this.activePiece.fallDown()
           : null
           break
@@ -1005,12 +995,15 @@ window.addEventListener("DOMContentLoaded", () => {
   const scoreCanvas = document.getElementById("score-level-canvas");
 
   const backgroundgameCtx= backgroundCanvas.getContext("2d");
-  const scoregameCtx = scoreCanvas.getContext("2d")
+  const scoreCtx = scoreCanvas.getContext("2d")
   const gameCtx = gameCanvas.getContext("2d");
 
+
+
   createGrid(backgroundgameCtx)
-  const game = new __WEBPACK_IMPORTED_MODULE_6__game_js__["a" /* default */]({gameCtx});
-  game.play()
+  const game = new __WEBPACK_IMPORTED_MODULE_6__game_js__["a" /* default */]({gameCtx, scoreCtx});
+  game.updateScore()
+  game.setup()
 })
 
 
@@ -1028,7 +1021,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
 
 const _levelVelocities = [
-  750, 650, 550, 500, 450, 400, 350, 325, 300,
+  850, 750, 650, 550, 500, 450, 400, 350, 325, 300,
   250, 225, 200, 175, 150, 140, 130, 120, 110
 ]
 
@@ -1037,27 +1030,90 @@ class Game{
   constructor(options){
     this.board = new __WEBPACK_IMPORTED_MODULE_0__board_js__["a" /* default */]({
       game: this,
-      gameCtx: options.gameCtx, velocity: _levelVelocities[0]
+      gameCtx: options.gameCtx,
+      scoreCtx: options.scoreCtx,
+      velocity: _levelVelocities[0]
     })
     this.level = 0
     this.linesCleared = 0
+    this.playing = false
     this.gameCtx = options.gameCtx
+    this.scoreCtx = options.scoreCtx
     this.availablePieces = []
   }
 
+  updateScore(){
+    this.scoreCtx.font="30px Press Start 2P";
+    this.scoreCtx.clearRect(0, 0, 180, 284);
+    this.scoreCtx.fillText(`Level: ${this.level + 1}`,10, 50);
+    this.scoreCtx.fillText(`Lines Cleared: ${this.linesCleared}`, 10, 100);
+  }
+
+  clearAnimations(){
+    clearInterval(this.board.animationId)
+    clearInterval(this.board.checkStops)
+  }
+
   levelUp(){
-    if(this.linesCleared % 10 === 0 & this.linesCleared != 0){
+    if(this.linesCleared >= (this.level + 1) * 10 ){
       this.level += 1
       this.board.velocity = _levelVelocities[this.level]
-      clearInterval(this.board.animationId)
+      this.clearAnimations()
       this.board.animate()
     }
   }
 
+  setup(){
+    this.keyPresses()
+  }
+
+  keyPresses(){
+    window.addEventListener("keydown", (e) => {
+      switch(e.keyCode){
+        case 13:
+          !this.playing ? this.startPlaying() : null
+          break;
+        case 83:
+          !this.playing ? this.startPlaying() : null
+          break;
+        case 82:
+          this.restart();
+          break;
+        case 80:
+          if(this.paused){
+            this.paused = false
+            this.board.animate()
+          }else{
+            this.clearAnimations()
+            this.paused = true
+          }
+          break;
+      }
+    })
+  }
+
+  startPlaying(){
+    this.play()
+    this.playing = true;
+  }
+
+  restart(){
+    this.board.clearCanvas()
+    this.board.createNullBoard()
+    this.clearAnimations()
+    setTimeout(() => {
+      this.introducePiece()
+      this.board.activePiece.draw()
+      this.board.animate()
+    }, 1000)
+  }
+
   play(){
-    this.createPieces()
-    this.board.handleKeyClicks()
-    this.introducePiece();
+    if(!this.playing){
+      this.createPieces()
+      this.introducePiece()
+    }
+    this.boardKeyClicks = this.board.handleKeyClicks()
     this.board.animate()
   }
 
@@ -1079,6 +1135,10 @@ class Game{
       __WEBPACK_IMPORTED_MODULE_1__pieces_create_pieces_js__["a" /* default */].forEach((pieceConstructor) => {
         const piece = pieceConstructor(this.gameCtx)
         piece.board = this.board
+        piece.squares().forEach((square) => {
+          square.gameCtx = this.gameCtx
+          square.anchorSquare = piece.anchorSquare
+        })
         this.availablePieces.push(piece)
       })
     }
@@ -1133,43 +1193,31 @@ class Game{
 
 function createLPiece(gameCtx){
 
-  const anchorSquare = new __WEBPACK_IMPORTED_MODULE_2__squares_anchor_square_js__["a" /* default */]({gameCtx: gameCtx, center: [4, 1]})
-  const relativeSquareOneUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [-1, 0], anchorSquare: anchorSquare})
-  const relativeSquareTwoUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [1, 0], anchorSquare: anchorSquare})
-  const relativeSquareThreeUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [-1, -1], anchorSquare: anchorSquare})
+  const anchorSquare = new __WEBPACK_IMPORTED_MODULE_2__squares_anchor_square_js__["a" /* default */]({center: [4, 1]})
+  const relativeSquareOneUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [-1, 0]})
+  const relativeSquareTwoUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [1, 0]})
+  const relativeSquareThreeUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [-1, -1]})
 
   const rotationOne = [anchorSquare, relativeSquareOneUp,
     relativeSquareTwoUp, relativeSquareThreeUp]
 
-  const relativeSquareOneDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [0, -1], anchorSquare: anchorSquare})
-  const relativeSquareTwoDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [0, 1], anchorSquare: anchorSquare})
-  const relativeSquareThreeDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [1, -1], anchorSquare: anchorSquare})
+  const relativeSquareOneDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [0, -1]})
+  const relativeSquareTwoDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [0, 1]})
+  const relativeSquareThreeDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [1, -1]})
 
   const rotationTwo = [anchorSquare, relativeSquareOneDown, relativeSquareTwoDown,
     relativeSquareThreeDown]
 
-  const relativeSquareOneLeft = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [1, 0], anchorSquare: anchorSquare})
-  const relativeSquareTwoLeft = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [-1, 0], anchorSquare: anchorSquare})
-  const relativeSquareThreeLeft = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [1, 1], anchorSquare: anchorSquare})
+  const relativeSquareOneLeft = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [1, 0]})
+  const relativeSquareTwoLeft = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [-1, 0]})
+  const relativeSquareThreeLeft = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [1, 1]})
 
   const rotationThree = [anchorSquare, relativeSquareOneLeft, relativeSquareTwoLeft,
     relativeSquareThreeLeft]
 
-  const relativeSquareOneRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [0, -1], anchorSquare: anchorSquare})
-  const relativeSquareTwoRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [0, 1], anchorSquare: anchorSquare})
-  const relativeSquareThreeRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [-1, 1], anchorSquare: anchorSquare})
+  const relativeSquareOneRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [0, -1]})
+  const relativeSquareTwoRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [0, 1]})
+  const relativeSquareThreeRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [-1, 1]})
 
   const rotationFour= [anchorSquare, relativeSquareOneRight, relativeSquareTwoRight,
     relativeSquareThreeRight]
@@ -1204,43 +1252,31 @@ function createLPiece(gameCtx){
 
 function createReverseLPiece(gameCtx){
 
-  const anchorSquare = new __WEBPACK_IMPORTED_MODULE_2__squares_anchor_square_js__["a" /* default */]({gameCtx: gameCtx, center: [4, 1]})
-  const relativeSquareOneUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [-1, 0], anchorSquare: anchorSquare})
-  const relativeSquareTwoUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [1, 0], anchorSquare: anchorSquare})
-  const relativeSquareThreeUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [1, -1], anchorSquare: anchorSquare})
+  const anchorSquare = new __WEBPACK_IMPORTED_MODULE_2__squares_anchor_square_js__["a" /* default */]({center: [4, 1]})
+  const relativeSquareOneUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [-1, 0]})
+  const relativeSquareTwoUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [1, 0]})
+  const relativeSquareThreeUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [1, -1]})
 
   const rotationOne = [anchorSquare, relativeSquareOneUp,
     relativeSquareTwoUp, relativeSquareThreeUp]
 
-  const relativeSquareOneDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [0, -1], anchorSquare: anchorSquare})
-  const relativeSquareTwoDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [0, 1], anchorSquare: anchorSquare})
-  const relativeSquareThreeDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [1, 1], anchorSquare: anchorSquare})
+  const relativeSquareOneDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [0, -1]})
+  const relativeSquareTwoDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [0, 1]})
+  const relativeSquareThreeDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [1, 1]})
 
   const rotationTwo = [anchorSquare, relativeSquareOneDown, relativeSquareTwoDown,
     relativeSquareThreeDown]
 
-  const relativeSquareOneLeft = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [1, 0], anchorSquare: anchorSquare})
-  const relativeSquareTwoLeft = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [-1, 0], anchorSquare: anchorSquare})
-  const relativeSquareThreeLeft = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [-1, 1], anchorSquare: anchorSquare})
+  const relativeSquareOneLeft = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [1, 0]})
+  const relativeSquareTwoLeft = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [-1, 0]})
+  const relativeSquareThreeLeft = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [-1, 1]})
 
   const rotationThree = [anchorSquare, relativeSquareOneLeft, relativeSquareTwoLeft,
     relativeSquareThreeLeft]
 
-  const relativeSquareOneRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [0, -1], anchorSquare: anchorSquare})
-  const relativeSquareTwoRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [0, 1], anchorSquare: anchorSquare})
-  const relativeSquareThreeRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [-1, -1], anchorSquare: anchorSquare})
+  const relativeSquareOneRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [0, -1]})
+  const relativeSquareTwoRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [0, 1]})
+  const relativeSquareThreeRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [-1, -1]})
 
   const rotationFour= [anchorSquare, relativeSquareOneRight, relativeSquareTwoRight,
     relativeSquareThreeRight]
@@ -1275,43 +1311,31 @@ function createReverseLPiece(gameCtx){
 
 function createReverseZPiece(gameCtx){
 
-  const anchorSquare = new __WEBPACK_IMPORTED_MODULE_2__squares_anchor_square_js__["a" /* default */]({gameCtx: gameCtx, center: [4, 1]})
-  const relativeSquareOneUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [0, -1], anchorSquare: anchorSquare})
-  const relativeSquareTwoUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [1, 0], anchorSquare: anchorSquare})
-  const relativeSquareThreeUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [-1, -1], anchorSquare: anchorSquare})
+  const anchorSquare = new __WEBPACK_IMPORTED_MODULE_2__squares_anchor_square_js__["a" /* default */]({center: [4, 1]})
+  const relativeSquareOneUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [0, -1]})
+  const relativeSquareTwoUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [1, 0]})
+  const relativeSquareThreeUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [-1, -1]})
 
   const rotationOne = [anchorSquare, relativeSquareOneUp,
     relativeSquareTwoUp, relativeSquareThreeUp]
 
-  const relativeSquareOneDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [0, 1], anchorSquare: anchorSquare})
-  const relativeSquareTwoDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [1, 0], anchorSquare: anchorSquare})
-  const relativeSquareThreeDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [1, -1], anchorSquare: anchorSquare})
+  const relativeSquareOneDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [0, 1]})
+  const relativeSquareTwoDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [1, 0]})
+  const relativeSquareThreeDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [1, -1]})
 
   const rotationTwo = [anchorSquare, relativeSquareOneDown,
     relativeSquareTwoDown, relativeSquareThreeDown]
 
-  const relativeSquareOneRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [-1, 0], anchorSquare: anchorSquare})
-  const relativeSquareTwoRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [0, 1], anchorSquare: anchorSquare})
-  const relativeSquareThreeRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [1, 1], anchorSquare: anchorSquare})
+  const relativeSquareOneRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [-1, 0]})
+  const relativeSquareTwoRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [0, 1]})
+  const relativeSquareThreeRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [1, 1]})
 
   const rotationThree = [anchorSquare, relativeSquareOneRight,
     relativeSquareTwoRight, relativeSquareThreeRight]
 
-  const relativeSquareOneLeft= new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [-1, 0], anchorSquare: anchorSquare})
-  const relativeSquareTwoLeft= new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [0, -1], anchorSquare: anchorSquare})
-  const relativeSquareThreeLeft= new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [-1, 1], anchorSquare: anchorSquare})
+  const relativeSquareOneLeft= new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [-1, 0]})
+  const relativeSquareTwoLeft= new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [0, -1]})
+  const relativeSquareThreeLeft= new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [-1, 1]})
 
   const rotationFour = [anchorSquare, relativeSquareOneLeft,
     relativeSquareTwoLeft, relativeSquareThreeLeft]
@@ -1346,13 +1370,10 @@ function createReverseZPiece(gameCtx){
 
 function createSquarePiece(gameCtx){
 
-  const anchorSquare = new __WEBPACK_IMPORTED_MODULE_2__squares_anchor_square_js__["a" /* default */]({gameCtx: gameCtx, center: [4, 1]})
-  const relativeSquareOne = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [-1, 0], anchorSquare: anchorSquare})
-  const relativeSquareTwo = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [0, -1], anchorSquare: anchorSquare})
-  const relativeSquareThree = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [-1, -1], anchorSquare: anchorSquare})
+  const anchorSquare = new __WEBPACK_IMPORTED_MODULE_2__squares_anchor_square_js__["a" /* default */]({center: [4, 1]})
+  const relativeSquareOne = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [-1, 0]})
+  const relativeSquareTwo = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [0, -1]})
+  const relativeSquareThree = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [-1, -1]})
 
   const rotationOne = [anchorSquare, relativeSquareOne, relativeSquareTwo, relativeSquareThree]
 
@@ -1385,43 +1406,31 @@ function createSquarePiece(gameCtx){
 
 function createZPiece(gameCtx){
 
-  const anchorSquare = new __WEBPACK_IMPORTED_MODULE_2__squares_anchor_square_js__["a" /* default */]({gameCtx: gameCtx, center: [4, 1]})
-  const relativeSquareOneUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [-1, 0], anchorSquare: anchorSquare})
-  const relativeSquareTwoUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [0, -1], anchorSquare: anchorSquare})
-  const relativeSquareThreeUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [1, -1], anchorSquare: anchorSquare})
+  const anchorSquare = new __WEBPACK_IMPORTED_MODULE_2__squares_anchor_square_js__["a" /* default */]({center: [4, 1]})
+  const relativeSquareOneUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [-1, 0]})
+  const relativeSquareTwoUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [0, -1]})
+  const relativeSquareThreeUp = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [1, -1]})
 
   const rotationOne = [anchorSquare, relativeSquareOneUp,
     relativeSquareTwoUp, relativeSquareThreeUp]
 
-  const relativeSquareOneDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [1, 0], anchorSquare: anchorSquare})
-  const relativeSquareTwoDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [0, -1], anchorSquare: anchorSquare})
-  const relativeSquareThreeDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [1, 1], anchorSquare: anchorSquare})
+  const relativeSquareOneDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [1, 0]})
+  const relativeSquareTwoDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [0, -1]})
+  const relativeSquareThreeDown = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [1, 1]})
 
   const rotationTwo = [anchorSquare, relativeSquareOneDown,
     relativeSquareTwoDown, relativeSquareThreeDown]
 
-  const relativeSquareOneRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [1, 0], anchorSquare: anchorSquare})
-  const relativeSquareTwoRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [0, 1], anchorSquare: anchorSquare})
-  const relativeSquareThreeRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [-1, 1], anchorSquare: anchorSquare})
+  const relativeSquareOneRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [1, 0]})
+  const relativeSquareTwoRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [0, 1]})
+  const relativeSquareThreeRight = new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [-1, 1]})
 
   const rotationThree = [anchorSquare, relativeSquareOneRight,
     relativeSquareTwoRight, relativeSquareThreeRight]
 
-  const relativeSquareOneLeft= new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [-1, 0], anchorSquare: anchorSquare})
-  const relativeSquareTwoLeft= new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [-1, -1], anchorSquare: anchorSquare})
-  const relativeSquareThreeLeft= new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({gameCtx: gameCtx,
-    offset: [0, 1], anchorSquare: anchorSquare})
+  const relativeSquareOneLeft= new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [-1, 0]})
+  const relativeSquareTwoLeft= new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [-1, -1]})
+  const relativeSquareThreeLeft= new __WEBPACK_IMPORTED_MODULE_3__squares_relative_square_js__["a" /* default */]({offset: [0, 1]})
 
   const rotationFour = [anchorSquare, relativeSquareOneLeft,
     relativeSquareTwoLeft, relativeSquareThreeLeft]

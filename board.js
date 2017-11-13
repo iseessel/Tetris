@@ -11,12 +11,14 @@ class Board{
     this.game = options.game
     this.velocity = options.velocity
     this.gameCtx = options.gameCtx
+    this.scoreCtx = options.scoreCtx
     this.grid = []
     this.activePiece = null
     this.createNullBoard()
   }
 
   animate(){
+    this.game.updateScore()
     this.activePiece.draw()
     this.animationId = window.setInterval(() => {
       this.activePiece.clearRect()
@@ -37,9 +39,8 @@ class Board{
 
   handleStoppedSquare(){
     this.stopSquare()
-    this.checkForRowClear()
     this.game.introducePiece()
-    this.game.levelUp()
+    this.checkForRowClear()
     this.activePiece.draw()
   }
 
@@ -92,6 +93,7 @@ class Board{
   }
 
   createNullBoard(){
+    this.grid = []
     for(let i = 0; i < 20; i++){
       const row = []
       for(let j = 0; j < 10; j++){
@@ -121,7 +123,6 @@ class Board{
 
   stopGame(){
     clearInterval(this.animationId)
-    debugger;
     while(this.activePieceCollide()){
       this.activePiece.anchorSquare.shiftUp()
     }
@@ -139,6 +140,8 @@ class Board{
     })
     if(rowsToBeCleared.length !== 0){
       this.clearRows(rowsToBeCleared)
+      this.game.levelUp()
+      this.game.updateScore()
     }
   }
 
@@ -182,28 +185,28 @@ class Board{
   }
 
   handleKeyClicks(){
-    this.handleKeyPress = window.addEventListener("keydown", (e) => {
+    return this.handleKeyPress = window.addEventListener("keydown", (e) => {
       switch(e.keyCode){
         case 37:
-          this.activePiece ?
+          this.activePiece && !this.game.paused ?
           this.activePiece.handleLeftKeyPress()
           : null
           break
 
         case 38:
-          this.activePiece ?
+          this.activePiece && !this.game.paused ?
           this.activePiece.handleUpKeyPress()
           : null
           break
 
         case 39:
-          this.activePiece ?
+          this.activePiece && !this.game.paused  ?
           this.activePiece.handleRightKeyPress()
           : null
           break
 
         case 40:
-          this.activePiece ?
+          this.activePiece && !this.game.paused  ?
           this.activePiece.fallDown()
           : null
           break

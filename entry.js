@@ -24,10 +24,13 @@ window.addEventListener("DOMContentLoaded", () => {
   const scoreCanvas = document.getElementById("score-level-canvas");
 
   const backgroundgameCtx= backgroundCanvas.getContext("2d");
-  const scoregameCtx = scoreCanvas.getContext("2d")
+  const scoreCtx = scoreCanvas.getContext("2d")
   const gameCtx = gameCanvas.getContext("2d");
 
+
+
   createGrid(backgroundgameCtx)
-  const game = new Game({gameCtx});
-  game.play()
+  const game = new Game({gameCtx, scoreCtx});
+  game.updateScore()
+  game.setup()
 })

@@ -10,6 +10,16 @@ class Piece{
     this.color = options.color
     this.vel = options.vel
   }
+
+  squares(){
+    let squares = []
+    this.rotations.forEach((rotation) => {
+      squares = squares.concat(rotation)
+    })
+
+    return squares
+  }
+
   currentRotation(){
     return this.rotations[this.currentRotationIdx]
   }
