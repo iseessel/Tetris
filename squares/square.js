@@ -1,4 +1,4 @@
-const _defaultBoardSize = [300, 600]
+const _defaultBoardSize = [250, 500]
 
 const _defaults = {
   dimensions: [_defaultBoardSize[0] / 10,

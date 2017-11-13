@@ -8,10 +8,11 @@
 
     <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
     <script src="./bundle.js"></script>
-    <link rel="stylesheet" href="./application.css">
 
   </head>
   <body>
+    <div style="font-family: Press Start 2P;"></div>
+
     <div class="game">
 
         <h1 class="game-title">
@@ -21,18 +22,30 @@
         <div class="game-console">
           <div class="rows">
             <div class="left-row">
-              <canvas width="300" height="600" id="game-canvas">
+              <canvas width="250" height="500" id="game-canvas">
               </canvas>
-              <canvas id="background-canvas" width="300" height="600">
+              <canvas id="background-canvas" width="250" height="500">
               </canvas>
             </div>
 
             <div class="right-row">
-              <canvas id="score-level-canvas" width="180" height="284"></canvas>
+              <div class="score">
+                <div class="score-text">
+                  <p>Level:  </p>
+                  <br>
+                  <p class="score-exact">Score: </p>
+                </div>
+                <canvas id="score-level-canvas" width="50" height="100"></canvas>
+              </div>
+              <div class="instructions">
+                <p>Press Enter to Play</p>
+                <p>Press P to Pause/Play</p>
+                <p>Press R to Restart</p>
+              </div>
             </div>
           </div>
           <div class="my-information">
-            <p>Created By Isaac Seessel</p>
+            <p>By Isaac Seessel</p>
             <div class="portfolio-links">
               <a href="https://github.com/iseessel">
                 <i class="fa fa-github" aria-hidden="true"></i>Git
@@ -47,5 +60,8 @@
 
     </div>
   </body>
+
+  <link rel="stylesheet" href="./application.css">
+
 
 </html>

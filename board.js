@@ -3,7 +3,7 @@ import nullSquareInstance from './squares/null_square.js'
 import Piece from './piece.js'
 import Square from './squares/square.js'
 
-const _defaultBoardSize = [300, 600]
+const _defaultBoardSize = [250, 500]
 
 class Board{
 
@@ -27,10 +27,10 @@ class Board{
     }, this.velocity)
 
     this.checkStops = window.setInterval(() => {
-      if(this.squareMustStop()){
+      if(this.squareMustStop() && this.game.playing){
         setTimeout(() => {
           if(this.squareMustStop()){
-            this.handleStoppedSquare()
+            this.game.playing ? this.handleStoppedSquare() : null
           }
         }, 500)
       }
@@ -122,14 +122,13 @@ class Board{
   }
 
   stopGame(){
+    this.game.playing = false;
+    clearInterval(this.checkStops)
     clearInterval(this.animationId)
     while(this.activePieceCollide()){
       this.activePiece.anchorSquare.shiftUp()
     }
     this.activePiece.draw()
-    setTimeout(() => {
-      alert(" You Lost :( ")
-    }, 100)
   }
 
 
@@ -188,24 +187,28 @@ class Board{
     return this.handleKeyPress = window.addEventListener("keydown", (e) => {
       switch(e.keyCode){
         case 37:
+          e.preventDefault()
           this.activePiece && !this.game.paused ?
           this.activePiece.handleLeftKeyPress()
           : null
           break
 
         case 38:
+          e.preventDefault()
           this.activePiece && !this.game.paused ?
           this.activePiece.handleUpKeyPress()
           : null
           break
 
         case 39:
+          e.preventDefault()
           this.activePiece && !this.game.paused  ?
           this.activePiece.handleRightKeyPress()
           : null
           break
 
         case 40:
+          e.preventDefault()
           this.activePiece && !this.game.paused  ?
           this.activePiece.fallDown()
           : null

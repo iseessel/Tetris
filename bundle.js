@@ -68,7 +68,7 @@
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-const _defaultBoardSize = [300, 600]
+const _defaultBoardSize = [250, 500]
 
 const _defaults = {
   dimensions: [_defaultBoardSize[0] / 10,
@@ -568,7 +568,7 @@ const _defaultPieces = []
 
 
 
-const _defaultBoardSize = [300, 600]
+const _defaultBoardSize = [250, 500]
 
 class Board{
 
@@ -592,10 +592,10 @@ class Board{
     }, this.velocity)
 
     this.checkStops = window.setInterval(() => {
-      if(this.squareMustStop()){
+      if(this.squareMustStop() && this.game.playing){
         setTimeout(() => {
           if(this.squareMustStop()){
-            this.handleStoppedSquare()
+            this.game.playing ? this.handleStoppedSquare() : null
           }
         }, 500)
       }
@@ -687,14 +687,13 @@ class Board{
   }
 
   stopGame(){
+    this.game.playing = false;
+    clearInterval(this.checkStops)
     clearInterval(this.animationId)
     while(this.activePieceCollide()){
       this.activePiece.anchorSquare.shiftUp()
     }
     this.activePiece.draw()
-    setTimeout(() => {
-      alert(" You Lost :( ")
-    }, 100)
   }
 
 
@@ -753,24 +752,28 @@ class Board{
     return this.handleKeyPress = window.addEventListener("keydown", (e) => {
       switch(e.keyCode){
         case 37:
+          e.preventDefault()
           this.activePiece && !this.game.paused ?
           this.activePiece.handleLeftKeyPress()
           : null
           break
 
         case 38:
+          e.preventDefault()
           this.activePiece && !this.game.paused ?
           this.activePiece.handleUpKeyPress()
           : null
           break
 
         case 39:
+          e.preventDefault()
           this.activePiece && !this.game.paused  ?
           this.activePiece.handleRightKeyPress()
           : null
           break
 
         case 40:
+          e.preventDefault()
           this.activePiece && !this.game.paused  ?
           this.activePiece.fallDown()
           : null
@@ -979,23 +982,24 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 const createGrid = (gameCtx) => {
-  for(let i = 0; i < 600; i += 30){
+  for(let i = 0; i < 500; i += 25){
     gameCtx.fillStyle = "rgba(255, 255, 255, 0.1)"
     gameCtx.fillRect(0, i, 300, 1);
   }
-  for(let i = 0; i < 300; i+= 30){
+  for(let i = 0; i < 250; i+= 25){
     gameCtx.fillStyle = "rgba(255, 255, 255, 0.1)"
     gameCtx.fillRect(i, 0, 1, 600);
   }
 }
 
-window.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("load", () => {
   const gameCanvas = document.getElementById("game-canvas");
   const backgroundCanvas = document.getElementById("background-canvas");
   const scoreCanvas = document.getElementById("score-level-canvas");
 
   const backgroundgameCtx= backgroundCanvas.getContext("2d");
   const scoreCtx = scoreCanvas.getContext("2d")
+  scoreCtx.font = "40px Press Start 2P"
   const gameCtx = gameCanvas.getContext("2d");
 
 
@@ -1043,10 +1047,11 @@ class Game{
   }
 
   updateScore(){
-    this.scoreCtx.font="30px Press Start 2P";
+    this.scoreCtx.font = "bold 14px Verdana"
+    this.scoreCtx.fillStyle = "whitesmoke"
     this.scoreCtx.clearRect(0, 0, 180, 284);
-    this.scoreCtx.fillText(`Level: ${this.level + 1}`,10, 50);
-    this.scoreCtx.fillText(`Lines Cleared: ${this.linesCleared}`, 10, 100);
+    this.scoreCtx.fillText(`${this.level + 1}`,5, 22);
+    this.scoreCtx.fillText(`${this.linesCleared}`, 5, 68);
   }
 
   clearAnimations(){
@@ -1071,21 +1076,21 @@ class Game{
     window.addEventListener("keydown", (e) => {
       switch(e.keyCode){
         case 13:
-          !this.playing ? this.startPlaying() : null
+          !this.playing && !this.restarting ? this.startPlaying() : null
           break;
         case 83:
-          !this.playing ? this.startPlaying() : null
+          !this.playing && !this.restarting ? this.startPlaying() : null
           break;
         case 82:
-          this.restart();
+          this.playing ? this.restart() : null
           break;
         case 80:
-          if(this.paused){
-            this.paused = false
+          if(!this.playing){
+            this.playing = true
             this.board.animate()
           }else{
             this.clearAnimations()
-            this.paused = true
+            this.playing = false
           }
           break;
       }
@@ -1098,13 +1103,17 @@ class Game{
   }
 
   restart(){
+    this.restarting = true
+    this.playing = false
+    this.clearAnimations()
     this.board.clearCanvas()
     this.board.createNullBoard()
-    this.clearAnimations()
     setTimeout(() => {
+      this.playing = true
       this.introducePiece()
       this.board.activePiece.draw()
       this.board.animate()
+      this.restarting = false
     }, 1000)
   }
 

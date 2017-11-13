@@ -1,22 +1,47 @@
 @import url(https://fonts.googleapis.com/css?family=Press+Start+2P);
-@import url(https://fonts.googleapis.com/css?family=Lobster);
 
 html{
   background: linear-gradient(#242834, black);
   height: 100%;
 }
 
+.instructions{
+  width: 125px;
+  font-family: 'Press Start 2P';
+  margin-top: 15px;
+  color: whitesmoke;
+  font-size: 10.5px;
+  margin-left: 10px;
+  margin-bottom: -3px;
+}
+
+.score{
+  font-family: 'Press Start 2P';
+  font-size: 10.5px;
+  color: whitesmoke;
+  margin-left: 10px;
+  display: flex;
+}
+
+.score-exact{
+  margin-top: 15px;
+}
+
+.instructions p{
+  margin-top: 25px;
+}
+
 .game-title{
   position: absolute;
-  top: 0px;
+  top: -20px;
   font-size: 50px;
   font-family: 'Press Start 2P', cursive;
   color: whitesmoke;
 }
 
 .game-console{
-  height: 690px;
-  width: 500px;
+  height: 590px;
+  width: 400px;
   border: 1px solid #242834;
   box-sizing: content-box;
   border-radius: 5px 5px 50px 50px;
@@ -30,7 +55,7 @@ html{
 .game{
   display: flex;
   justify-content: center;
-  margin-top: 50px;
+  margin-top: 30px;
 }
 
 .left-row{
@@ -41,10 +66,13 @@ html{
 .right-row{
   box-sizing: border-box;
   margin-top: 40px;
+  display:flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .my-information{
-  width: 475px;
+  width: 400px;
   display: flex;
   justify-content: space-between;
   align-items: center;

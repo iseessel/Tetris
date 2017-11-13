@@ -25,10 +25,11 @@ class Game{
   }
 
   updateScore(){
-    this.scoreCtx.font="30px Press Start 2P";
+    this.scoreCtx.font = "bold 14px Verdana"
+    this.scoreCtx.fillStyle = "whitesmoke"
     this.scoreCtx.clearRect(0, 0, 180, 284);
-    this.scoreCtx.fillText(`Level: ${this.level + 1}`,10, 50);
-    this.scoreCtx.fillText(`Lines Cleared: ${this.linesCleared}`, 10, 100);
+    this.scoreCtx.fillText(`${this.level + 1}`,5, 22);
+    this.scoreCtx.fillText(`${this.linesCleared}`, 5, 68);
   }
 
   clearAnimations(){
@@ -53,21 +54,21 @@ class Game{
     window.addEventListener("keydown", (e) => {
       switch(e.keyCode){
         case 13:
-          !this.playing ? this.startPlaying() : null
+          !this.playing && !this.restarting ? this.startPlaying() : null
           break;
         case 83:
-          !this.playing ? this.startPlaying() : null
+          !this.playing && !this.restarting ? this.startPlaying() : null
           break;
         case 82:
-          this.restart();
+          this.playing ? this.restart() : null
           break;
         case 80:
-          if(this.paused){
-            this.paused = false
+          if(!this.playing){
+            this.playing = true
             this.board.animate()
           }else{
             this.clearAnimations()
-            this.paused = true
+            this.playing = false
           }
           break;
       }
@@ -80,13 +81,17 @@ class Game{
   }
 
   restart(){
+    this.restarting = true
+    this.playing = false
+    this.clearAnimations()
     this.board.clearCanvas()
     this.board.createNullBoard()
-    this.clearAnimations()
     setTimeout(() => {
+      this.playing = true
       this.introducePiece()
       this.board.activePiece.draw()
       this.board.animate()
+      this.restarting = false
     }, 1000)
   }
 
