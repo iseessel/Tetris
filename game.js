@@ -54,13 +54,16 @@ class Game{
     window.addEventListener("keydown", (e) => {
       switch(e.keyCode){
         case 13:
-          !this.playing && !this.restarting ? this.startPlaying() : null
+          !this.playing && !this.restarting ?
+            this.startPlaying() : null
           break;
         case 83:
-          !this.playing && !this.restarting ? this.startPlaying() : null
+          !this.playing && !this.restarting ?
+            this.startPlaying() : null
           break;
         case 82:
-          this.playing ? this.restart() : null
+          this.playing ? this.restart() :
+            null
           break;
         case 80:
           if(!this.playing){
@@ -81,8 +84,10 @@ class Game{
   }
 
   restart(){
+    $(".visible").toggleClass("visible hidden")
     this.restarting = true
     this.playing = false
+    this.clearScore()
     this.clearAnimations()
     this.board.clearCanvas()
     this.board.createNullBoard()
@@ -92,7 +97,12 @@ class Game{
       this.board.activePiece.draw()
       this.board.animate()
       this.restarting = false
-    }, 1000)
+    }, 500)
+  }
+
+  clearScore(){
+    this.level = 0
+    this.linesCleared = 0
   }
 
   play(){

@@ -27,10 +27,12 @@ class Board{
     }, this.velocity)
 
     this.checkStops = window.setInterval(() => {
-      if(this.squareMustStop() && this.game.playing){
+      if(this.squareMustStop() && !this.stopping){
+        this.stopping = true
         setTimeout(() => {
+          this.stopping = false
           if(this.squareMustStop()){
-            this.game.playing ? this.handleStoppedSquare() : null
+            !this.game.restarting ? this.handleStoppedSquare() : null
           }
         }, 500)
       }
@@ -122,9 +124,13 @@ class Board{
   }
 
   stopGame(){
-    this.game.playing = false;
+    this.game.restarting = true
     clearInterval(this.checkStops)
     clearInterval(this.animationId)
+    $(".hidden").toggleClass("hidden visible")
+    setTimeout(() => {
+      $(".visible").toggleClass("visible hidden")
+    }, 5000)
     while(this.activePieceCollide()){
       this.activePiece.anchorSquare.shiftUp()
     }
@@ -188,28 +194,28 @@ class Board{
       switch(e.keyCode){
         case 37:
           e.preventDefault()
-          this.activePiece && !this.game.paused ?
+          this.activePiece && this.game.playing ?
           this.activePiece.handleLeftKeyPress()
           : null
           break
 
         case 38:
           e.preventDefault()
-          this.activePiece && !this.game.paused ?
+          this.activePiece && this.game.playing ?
           this.activePiece.handleUpKeyPress()
           : null
           break
 
         case 39:
           e.preventDefault()
-          this.activePiece && !this.game.paused  ?
+          this.activePiece && this.game.playing  ?
           this.activePiece.handleRightKeyPress()
           : null
           break
 
         case 40:
           e.preventDefault()
-          this.activePiece && !this.game.paused  ?
+          this.activePiece && this.game.playing  ?
           this.activePiece.fallDown()
           : null
           break

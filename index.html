@@ -5,7 +5,7 @@
     <title></title>
     <link href="https://fonts.googleapis.com/css?family=Press+Start+2P"
       rel="stylesheet">
-
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
     <script src="./bundle.js"></script>
 
@@ -22,6 +22,12 @@
         <div class="game-console">
           <div class="rows">
             <div class="left-row">
+              <div class="lost-game hidden">
+                You Lost.
+                <br>
+                <br>
+                Press R to Restart!
+              </div>
               <canvas width="250" height="500" id="game-canvas">
               </canvas>
               <canvas id="background-canvas" width="250" height="500">
