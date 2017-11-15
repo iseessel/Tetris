@@ -1054,6 +1054,8 @@ class Game{
 
   setupSound(){
     this.sound = document.createElement("audio");
+    this.sound.loop = true
+
     this.sound.src = './tetris-gameboy.mp3';
     this.sound.setAttribute("preload", "auto");
     this.sound.setAttribute("controls", "none");
