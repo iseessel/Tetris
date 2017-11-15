@@ -695,9 +695,6 @@ class Board{
     clearInterval(this.checkStops)
     clearInterval(this.animationId)
     $(".hidden").toggleClass("hidden visible")
-    setTimeout(() => {
-      $(".visible").toggleClass("visible hidden")
-    }, 5000)
     while(this.activePieceCollide()){
       this.activePiece.anchorSquare.shiftUp()
     }
