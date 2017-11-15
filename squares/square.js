@@ -19,11 +19,13 @@ class Square{
   //NB: When a piece is no longer moving on the board, we will use
   // its static position on the grid, passed in from the board.
   draw(color, pos = this.pos()){
-    this.color = (color ? color : this.color)
-    const drawingPos = this.cordsToPos(pos)
-    this.gameCtx.fillStyle = this.color
-    this.gameCtx.fillRect(drawingPos[0] + 1, drawingPos[1] + 1,
-      this.dimensions[0] - 4, this.dimensions[1] - 4);
+    if(this.inBounds()){
+      this.color = (color ? color : this.color)
+      const drawingPos = this.cordsToPos(pos)
+      this.gameCtx.fillStyle = this.color
+      this.gameCtx.fillRect(drawingPos[0] + 1, drawingPos[1] + 1,
+        this.dimensions[0] - 4, this.dimensions[1] - 4);
+    }
   }
 
   clearRect(){
