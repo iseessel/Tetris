@@ -32,17 +32,16 @@ class Game{
     this.sound.setAttribute("controls", "none");
     this.sound.style.display = "none";
     document.body.appendChild(this.sound);
-    this.playing = false
     return this.sound
   }
 
   toggleSound() {
-    if(this.playing){
+    if(this.musicPlaying){
       this.sound.pause()
-      this.playing = false
+      this.musicPlaying = false
     }else{
       this.sound.play();
-      this.playing = true
+      this.musicPlaying = true
     }
   }
 
