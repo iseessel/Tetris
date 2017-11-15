@@ -979,6 +979,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__pieces_t_piece_js__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__piece_js__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__board_js__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__board_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__board_js__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__game_js__ = __webpack_require__(18);
 
 
@@ -1052,6 +1053,28 @@ class Game{
     this.gameCtx = options.gameCtx
     this.scoreCtx = options.scoreCtx
     this.availablePieces = []
+    this.sound = this.setupSound()
+  }
+
+  setupSound(){
+    this.sound = document.createElement("audio");
+    this.sound.src = './tetris-gameboy.mp3';
+    this.sound.setAttribute("preload", "auto");
+    this.sound.setAttribute("controls", "none");
+    this.sound.style.display = "none";
+    document.body.appendChild(this.sound);
+    this.playing = false
+    return this.sound
+  }
+
+  toggleSound() {
+    if(this.playing){
+      this.sound.pause()
+      this.playing = false
+    }else{
+      this.sound.play();
+      this.playing = true
+    }
   }
 
   updateScore(){
@@ -1086,6 +1109,9 @@ class Game{
         case 13:
           !this.playing && !this.restarting ?
             this.startPlaying() : null
+          break;
+        case 77:
+          this.toggleSound()
           break;
         case 83:
           !this.playing && !this.restarting ?

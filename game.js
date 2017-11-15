@@ -22,6 +22,28 @@ class Game{
     this.gameCtx = options.gameCtx
     this.scoreCtx = options.scoreCtx
     this.availablePieces = []
+    this.sound = this.setupSound()
+  }
+
+  setupSound(){
+    this.sound = document.createElement("audio");
+    this.sound.src = './tetris-gameboy.mp3';
+    this.sound.setAttribute("preload", "auto");
+    this.sound.setAttribute("controls", "none");
+    this.sound.style.display = "none";
+    document.body.appendChild(this.sound);
+    this.playing = false
+    return this.sound
+  }
+
+  toggleSound() {
+    if(this.playing){
+      this.sound.pause()
+      this.playing = false
+    }else{
+      this.sound.play();
+      this.playing = true
+    }
   }
 
   updateScore(){
@@ -56,6 +78,9 @@ class Game{
         case 13:
           !this.playing && !this.restarting ?
             this.startPlaying() : null
+          break;
+        case 77:
+          this.toggleSound()
           break;
         case 83:
           !this.playing && !this.restarting ?
