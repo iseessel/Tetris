@@ -150,6 +150,12 @@ class Piece{
     return squares
   }
 
+  each(callback, args){
+    this.currentRotation().forEach((square) => {
+      callback.apply(square, args)
+    })
+  }
+
   currentRotation(){
     return this.rotations[this.currentRotationIdx]
   }
@@ -160,6 +166,11 @@ class Piece{
 
   clearRect(){
     this.each((__WEBPACK_IMPORTED_MODULE_0__squares_square_js__["a" /* default */].prototype.clearRect))
+  }
+
+  rotate(){
+    this.currentRotationIdx = (this.currentRotationIdx + 1) %
+      this.rotations.length
   }
 
   fallDown(){
@@ -201,11 +212,6 @@ class Piece{
     }
   }
 
-  rotate(){
-    this.currentRotationIdx = (this.currentRotationIdx + 1) %
-      this.rotations.length
-  }
-
   unRotate(){
     this.currentRotationIdx = (this.currentRotationIdx
       + this.rotations.length - 1) %
@@ -230,8 +236,7 @@ class Piece{
   wallKick(){
     //Naively search for a position to move to; if are available on one side,
     //try the other side -- otherwise give up and return to original position.
-    //NB: This naive way results in fewer
-    // computations than checking which side a collision is on.
+    //NB: This naive way results in fewer computations than checking which side a collision is on.
     for(let i = 0; i < 2; i ++){
       if (this.positionAvailable()){
         this.anchorSquare.moveLeft()
@@ -257,12 +262,6 @@ class Piece{
 
   positionAvailable(){
     return !this.inBounds() || this.board.activePieceCollide()
-  }
-
-  each(callback, args){
-    this.currentRotation().forEach((square) => {
-      callback.apply(square, args)
-    })
   }
 
   atBottom(){
@@ -1054,8 +1053,6 @@ class Game{
 
   setupSound(){
     this.sound = document.createElement("audio");
-    this.sound.loop = true
-
     this.sound.src = './tetris-gameboy.mp3';
     this.sound.setAttribute("preload", "auto");
     this.sound.setAttribute("controls", "none");
