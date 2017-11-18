@@ -88,12 +88,13 @@ class Square{
 
   //NB: When a piece is no longer moving on the board, we will use
   // its static position on the grid, passed in from the board.
-  draw(color, pos = this.pos()){
+  draw(color, pos = this.pos(), ctx = this.gameCtx){
+    pos = pos ? pos : this.pos()
     if(this.inBounds()){
       this.color = (color ? color : this.color)
       const drawingPos = this.cordsToPos(pos)
-      this.gameCtx.fillStyle = this.color
-      this.gameCtx.fillRect(drawingPos[0] + 1, drawingPos[1] + 1,
+      ctx.fillStyle = this.color
+      ctx.fillRect(drawingPos[0] + 1, drawingPos[1] + 1,
         this.dimensions[0] - 4, this.dimensions[1] - 4);
     }
   }
@@ -128,6 +129,8 @@ class Square{
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__squares_square_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__squares_anchor_square_js__ = __webpack_require__(2);
+
 
 
 class Piece{
@@ -146,8 +149,21 @@ class Piece{
     this.rotations.forEach((rotation) => {
       squares = squares.concat(rotation)
     })
-
     return squares
+  }
+
+  dupPiece(){
+    // return JSON.parse(JSON.stringify())
+    // const piece = new Piece({rotations: this.rotations, currentRotationIdx: 0,
+    //     vel: 500, anchorSquare: new AnchorSquare({center: [2, 2]}),
+    //     color: "#FA980B"})
+    // piece.rotations.forEach((rotation) =>{
+    //   rotation.forEach((square) => {
+    //     square.anchorSquare = piece.anchorSquare
+    //   })
+    // })
+    //
+    return piece;
   }
 
   each(callback, args){
@@ -985,7 +1001,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-const createGrid = (gameCtx) => {
+const createGrid = (gameCtx, nextPieceBgCtx) => {
   for(let i = 0; i < 500; i += 25){
     gameCtx.fillStyle = "rgba(255, 255, 255, 0.1)"
     gameCtx.fillRect(0, i, 300, 1);
@@ -994,22 +1010,36 @@ const createGrid = (gameCtx) => {
     gameCtx.fillStyle = "rgba(255, 255, 255, 0.1)"
     gameCtx.fillRect(i, 0, 1, 600);
   }
+
+  for(let i = 0; i < 100; i += 25){
+    nextPieceBgCtx.fillStyle = "rgba(255, 255, 255, 0.1)"
+    nextPieceBgCtx.fillRect(0, i, 300, 1);
+  }
+  for(let i = 0; i < 100; i+= 25){
+    nextPieceBgCtx.fillStyle = "rgba(255, 255, 255, 0.1)"
+    nextPieceBgCtx.fillRect(i, 0, 1, 600);
+  }
 }
 
 window.addEventListener("load", () => {
   const gameCanvas = document.getElementById("game-canvas");
   const backgroundCanvas = document.getElementById("background-canvas");
   const scoreCanvas = document.getElementById("score-level-canvas");
+  const nextPieceCanvas = document.getElementById("next-piece-canvas")
+  const nextPieceBgCanvas = document.getElementById("next-piece-background-canvas")
 
   const backgroundgameCtx= backgroundCanvas.getContext("2d");
   const scoreCtx = scoreCanvas.getContext("2d")
+  const nextPieceBgCtx = nextPieceBgCanvas.getContext("2d")
+  const nextPieceCtx = nextPieceCanvas.getContext("2d")
+
   scoreCtx.font = "40px Press Start 2P"
   const gameCtx = gameCanvas.getContext("2d");
 
 
 
-  createGrid(backgroundgameCtx)
-  const game = new __WEBPACK_IMPORTED_MODULE_6__game_js__["a" /* default */]({gameCtx, scoreCtx});
+  createGrid(backgroundgameCtx, nextPieceBgCtx)
+  const game = new __WEBPACK_IMPORTED_MODULE_6__game_js__["a" /* default */]({gameCtx, scoreCtx, nextPieceCtx});
   game.updateScore()
   game.setup()
 })
@@ -1021,9 +1051,11 @@ window.addEventListener("load", () => {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__board_js__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__pieces_create_pieces_js__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash_shuffle__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash_shuffle___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_lodash_shuffle__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__piece_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__pieces_create_pieces_js__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_lodash_shuffle__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_lodash_shuffle___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_lodash_shuffle__);
+
 
 
 
@@ -1045,6 +1077,7 @@ class Game{
     this.level = 0
     this.linesCleared = 0
     this.playing = false
+    this.nextPieceCtx = options.nextPieceCtx
     this.gameCtx = options.gameCtx
     this.scoreCtx = options.scoreCtx
     this.availablePieces = []
@@ -1076,7 +1109,7 @@ class Game{
     this.scoreCtx.fillStyle = "whitesmoke"
     this.scoreCtx.clearRect(0, 0, 180, 284);
     this.scoreCtx.fillText(`${this.level + 1}`,5, 22);
-    this.scoreCtx.fillText(`${this.linesCleared}`, 5, 68);
+    this.scoreCtx.fillText(`${this.linesCleared}`, 5, 47);
   }
 
   clearAnimations(){
@@ -1085,7 +1118,7 @@ class Game{
   }
 
   levelUp(){
-    if(this.linesCleared >= (this.level + 1) * 10 ){
+    if(this.linesCleared >= (this.level + 1) * 5 ){
       this.level += 1
       this.board.velocity = _levelVelocities[this.level]
       this.clearAnimations()
@@ -1145,6 +1178,7 @@ class Game{
       this.playing = true
       this.introducePiece()
       this.board.activePiece.draw()
+      this.board.velocity = _levelVelocities[this.level]
       this.board.animate()
       this.restarting = false
     }, 500)
@@ -1165,10 +1199,23 @@ class Game{
   }
 
   introducePiece(){
+    const randomPiece = this.randomPiece()
+    this.board.introducePiece(randomPiece)
     this.availablePieces.length === 0
         ? this.createPieces()
         : null
-    this.board.introducePiece(this.randomPiece())
+    this.drawNextPiece(this.availablePieces[0])
+  }
+
+  drawNextPiece(piece){
+    this.nextPieceCtx.clearRect(0, 0, 100, 100)
+    const prevPosition = JSON.parse(JSON.stringify(piece.anchorSquare.position))
+    piece.anchorSquare.position[0] = 2
+    piece.anchorSquare.position[1] = 2
+    piece.currentRotation().forEach((square) => {
+      square.draw(piece.color, square.pos(), this.nextPieceCtx)
+    })
+    piece.anchorSquare.position = prevPosition
   }
 
   randomPiece(){
@@ -1179,7 +1226,7 @@ class Game{
 
   createPieces(){
     for(let i = 0; i < 4; i++){
-      __WEBPACK_IMPORTED_MODULE_1__pieces_create_pieces_js__["a" /* default */].forEach((pieceConstructor) => {
+      __WEBPACK_IMPORTED_MODULE_2__pieces_create_pieces_js__["a" /* default */].forEach((pieceConstructor) => {
         const piece = pieceConstructor(this.gameCtx)
         piece.board = this.board
         piece.squares().forEach((square) => {
@@ -1189,7 +1236,7 @@ class Game{
         this.availablePieces.push(piece)
       })
     }
-    this.availablePieces = __WEBPACK_IMPORTED_MODULE_2_lodash_shuffle___default()(this.availablePieces)
+    this.availablePieces = __WEBPACK_IMPORTED_MODULE_3_lodash_shuffle___default()(this.availablePieces)
   }
 }
 

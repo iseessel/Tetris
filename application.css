@@ -3,6 +3,25 @@
 html{
   background: linear-gradient(#242834, black);
   height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.next-piece{
+  margin-top: 10px;
+  height: 5px;
+}
+
+#next-piece-canvas{
+  position: absolute;
+  margin: 0 auto;
+  margin-top: 26px;
+  background-color: #1e222e
+}
+
+.score-text{
+  margin-left: 12px;
 }
 
 .instructions, .movement{
@@ -20,7 +39,6 @@ html{
   font-family: 'Press Start 2P';
   font-size: 10.5px;
   color: whitesmoke;
-  margin-left: 10px;
   display: flex;
 }
 
@@ -34,8 +52,8 @@ html{
 
 .game-title{
   position: absolute;
-  top: -20px;
-  font-size: 50px;
+  top: -55px;
+  font-size: 55px;
   font-family: 'Press Start 2P', cursive;
   color: whitesmoke;
 }
@@ -50,13 +68,18 @@ html{
   background-color: #421a88;
 }
 
+.level-and-score{
+  display: flex;
+}
+
 .rows{
   display: flex;
 }
 .game{
+  margin-bottom: 20px;
+  position: relative;
   display: flex;
   justify-content: center;
-  margin-top: 30px;
 }
 
 .left-row{
@@ -120,7 +143,10 @@ canvas{
   position: relative;
 }
 
-#score-level-canvas{
+#next-piece-background-canvas{
+  width: 100px;
+  z-index: 1;
+  position: relative;
 }
 
 .portfolio-links{
@@ -147,4 +173,11 @@ canvas{
 .hidden{
   height: 0px;
   visibility: hidden;
+}
+
+.ui-canvas{
+  margin-left: 16px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 }

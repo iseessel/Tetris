@@ -36,18 +36,23 @@
 
             <div class="right-row">
               <div class="score">
-                <div class="score-text">
-                  <p>Level:  </p>
-                  <br>
-                  <p class="score-exact">Score: </p>
+                <div class="ui-canvas">
+                  <p class="next-piece">Next Piece</p>
+                  <canvas id="next-piece-canvas" width="100" height="100"></canvas>
+                  <canvas id="next-piece-background-canvas" width="100" height="100">
+                  </canvas>
+                  <div class="level-and-score">
+                    <div class="score-text">
+                      <p>Level:  </p>
+                      <p class="score-exact">Score: </p>
+                    </div>
+                    <canvas id="score-level-canvas" width="25" height="80"></canvas>
+                  </div>
                 </div>
-                <canvas id="score-level-canvas" width="50" height="100"></canvas>
-              </div>
-              <div class="movement">
-                <p>Left/ right keys to move piece</p>
-                <p>Up to rotate piece</p>
               </div>
               <div class="instructions">
+                <p>Left/ right keys to move piece</p>
+                <p>Up to rotate piece</p>
                 <p>Enter to play</p>
                 <p>P to pause/play</p>
                 <p>R to restart</p>
@@ -56,12 +61,14 @@
             </div>
           </div>
           <div class="my-information">
-            <p>By Isaac Seessel</p>
+            <a href="http://www.isaacseessel.com">
+              <p>By Isaac Seessel</p>
+            </a>
             <div class="portfolio-links">
               <a href="https://github.com/iseessel">
                 <i class="fa fa-github" aria-hidden="true"></i>Git
               </a>
-              <a href="https://wwww.isaacseessel.com">
+              <a href="http://www.isaacseessel.com">
                 <i class="fa fa-info-circle" aria-hidden="true"></i>Site
               </a>
             </div>
