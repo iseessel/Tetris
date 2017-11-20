@@ -152,20 +152,6 @@ class Piece{
     return squares
   }
 
-  dupPiece(){
-    // return JSON.parse(JSON.stringify())
-    // const piece = new Piece({rotations: this.rotations, currentRotationIdx: 0,
-    //     vel: 500, anchorSquare: new AnchorSquare({center: [2, 2]}),
-    //     color: "#FA980B"})
-    // piece.rotations.forEach((rotation) =>{
-    //   rotation.forEach((square) => {
-    //     square.anchorSquare = piece.anchorSquare
-    //   })
-    // })
-    //
-    return piece;
-  }
-
   each(callback, args){
     this.currentRotation().forEach((square) => {
       callback.apply(square, args)
@@ -230,8 +216,7 @@ class Piece{
 
   unRotate(){
     this.currentRotationIdx = (this.currentRotationIdx
-      + this.rotations.length - 1) %
-      this.rotations.length
+      + this.rotations.length - 1) % this.rotations.length
   }
 
   handleUpKeyPress(){
